@@ -1,0 +1,169 @@
+<decisionTemplate>
+	<name>Fit for Dynamic Services (Fit4DS)</name>
+	<description>Transformation von Applikationen von konventionellen Infrastrukturen auf Cloud Infrastrukturen oder Plattformen(Cloud Readiness Assessment)mit Berücksichtigung von realen Nebenbedingungen aus DSBA und DSI</description>
+	<templateName>Cloud Infrastruktur Decision Template</templateName>
+	<alternatives>
+		<alternative>
+			<name>Dynmic Services for Business Applications (DSBA)</name>
+			<description>Use of the T-Systems cloud infrastructure approach. This IaaS approach includes typical infrastructure maintenence services, which have to be specified and detailed during the customer consulting. Example: Backup. For the business case, both running operating costs and transformation costs will be included.</description>
+		</alternative>
+        <alternative>
+			<name>Dynamic Service for Infrastructure (maintenence service)</name>
+			<description>Use of the T-Systems cloud infrastructure approach. This IaaS approach includes typical infrastructure maintenence services, which have to be specified and detailed during the customer consulting. Example: Backup. For the business case, both running operating costs and transformation costs will be included.</description>
+		</alternative>
+        <alternative>
+			<name>Dynamic Service for Infrastructure (no maintenence)</name>
+			<description>Use of non-cloud T-Systems classical application hosting. For the busines case, all operation costs including platform services and transition will be used.</description>
+		</alternative>
+        <alternative>
+			<name>Classical Hosting</name>
+			<description>Don't change the current mode of operation. NOTE: This Mode must be reworked according to the concrete customer situation. The figures inside are only very rough dummies.</description>
+		</alternative>
+        <alternative>
+			<name>Keep Current Mode of Operation</name>
+			<description>Use of the T-Systems cloud platform approach. For the business case, both running operating costs and transformation costs will be included.</description>
+		</alternative>
+	</alternatives>
+	<goals>
+		<goal>
+			<name>Static Cost</name>
+			<description>Total cost of ownership of one (set of) application(s) calculated on the assumed runtime. Basicaly once the TandT costs + running costs over the assumed runtime.</description>
+			<goalType>NEGATIVE</goalType>
+			<children>
+                <criterion>
+					<name>Operating Costs</name>
+					<description></description>
+					<type>qualitative</type>
+					<weight></weight>
+					<children>
+                        <criterion>
+                            <name>Infrastructure (depreciation)</name>
+                            <description></description>
+                            <type>quantitative</type>
+                            <weight></weight>
+                            <children></children>
+                            <criterionImportances></criterionImportances>
+                        </criterion>
+                        <criterion>
+                            <name>Infrastructure Services</name>
+                            <description></description>
+                            <type>quantitative</type>
+                            <weight></weight>
+                            <children></children>
+                            <criterionImportances></criterionImportances>
+                        </criterion>
+                        <criterion>
+                            <name>Platform Services</name>
+                            <description></description>
+                            <type>quantitative</type>
+                            <weight></weight>
+                            <children></children>
+                            <criterionImportances></criterionImportances>
+                        </criterion>
+                        <criterion>
+                            <name>Application Management Services</name>
+                            <description></description>
+                            <type>quantitative</type>
+                            <weight></weight>
+                            <children></children>
+                            <criterionImportances></criterionImportances>
+                        </criterion>
+                    </children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+                <criterion>
+                    <name>Transformation and Transaction Costs</name>
+                    <description></description>
+                    <type>qualitative</type>
+                    <weight></weight>
+                    <children>
+                        <criterion>
+                            <name>Transition and Migration</name>
+                            <description></description>
+                            <type>quantitative</type>
+                            <weight></weight>
+                            <children></children>
+                            <criterionImportances></criterionImportances>
+                        </criterion>
+                        <criterion>
+                            <name>Transformation</name>
+                            <description></description>
+                            <type>quantitative</type>
+                            <weight></weight>
+                            <children></children>
+                            <criterionImportances></criterionImportances>
+                        </criterion>
+                    </children>
+                    <criterionImportances></criterionImportances>
+                </criterion>
+            </children>
+            <importanceChildren></importanceChildren>
+		</goal>
+        <goal>
+            <name>Quality</name>
+			<description>operational stability of the solution, measured against customer given SLA perhaps on different levels.</description>
+			<goalType>POSITIVE</goalType>
+			<children>
+                <criterion>
+					<name>Average Availability</name>
+					<description>Typical ##.##% SLA possibly measured on various levels (application, platform, infrastructure)</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+                <criterion>
+					<name>Monthly Downtimes</name>
+					<description>Hours of planned downtime (per month or other reasonable time slice)</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+                <criterion>
+					<name>Time-to-recover</name>
+					<description>Hours to recover after a fatal error (backup resostore time)</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+            </children>
+            <importanceChildren></importanceChildren>
+        </goal>
+        <goal>
+            <name>Flexibility</name>
+			<description>General ability to adapt to changed quantative requirements</description>
+			<goalType>POSITIVE</goalType>
+			<children>
+                <criterion>
+					<name>Workload Share</name>
+					<description>Time to move workloads between existing operating platforms</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+                <criterion>
+					<name>Scalability</name>
+					<description>Time to scale up/down</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+                <criterion>
+					<name>Financial</name>
+					<description>linear impact of scaling changes to running costs (pay what you use)</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+            </children>
+            <importanceChildren></importanceChildren>
+        </goal>
+	</goals>
+	<importanceGoals>
+	</importanceGoals>
+</decisionTemplate>

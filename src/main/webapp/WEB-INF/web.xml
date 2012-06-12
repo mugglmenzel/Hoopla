@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+	<icon></icon>
+
+	
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>AotearoaServiceImpl</servlet-name>
+		<servlet-class>de.fzi.aotearoa.server.services.AotearoaServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AotearoaServiceImpl</servlet-name>
+		<url-pattern>/aotearoa/aotearoa</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>loginService</servlet-name>
+		<servlet-class>de.fzi.aotearoa.server.services.LoginServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/aotearoa/login</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>templateImport</servlet-name>
+		<servlet-class>de.fzi.aotearoa.server.servlets.TemplateImportServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>templateImport</servlet-name>
+		<url-pattern>/aotearoa/import</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>templateExport</servlet-name>
+		<servlet-class>de.fzi.aotearoa.server.servlets.TemplateExportServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>templateExport</servlet-name>
+		<url-pattern>/aotearoa/export</url-pattern>
+	</servlet-mapping>
+	
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>AotearoaSmart.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>

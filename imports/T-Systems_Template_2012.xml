@@ -1,0 +1,280 @@
+<decisionTemplate>
+	<name>Fit for Dynamic Services (Fit4DS)</name>
+	<description>Transformation von Applikationen von konventionellen
+		Infrastrukturen auf Cloud Infrastrukturen oder Plattformen (Cloud
+		Readiness Assessment)mit Berücksichtigung von realen Nebenbedingungen
+		aus DSBA und DSI
+	</description>
+	<templateName>Cloud Infrastructure Decision Template</templateName>
+	<alternatives>
+		<alternative>
+			<name>Dynamic Services for Business Applications (DSBA)</name>
+			<description>Use of the platform DSBA requiring a adaption by the
+				application (re-platforming) without the use of shared services
+				(extended platform strategy).
+			</description>
+		</alternative>
+		<alternative>
+			<name>Dynamic Service for Infrastructure (managed service)</name>
+			<description>Use of the T-Systems cloud infrastructure approach. This
+				IaaS approach includes typical infrastructure maintenance services,
+				which have to be specified and detailed during the customer
+				consulting. Example: Backup. For the business case, both running
+				operating costs and transformation costs will be included.
+			</description>
+		</alternative>
+		<alternative>
+			<name>Dynamic Service for Infrastructure (unmnaged service)</name>
+			<description>Use of the T-Systems cloud platform approach. For the
+				business case, both running operating costs and transformation costs
+				will be included.
+			</description>
+		</alternative>
+		<alternative>
+			<name>Dedicated Solution (Classical Hosting)</name>
+			<description>Use of non-cloud T-Systems classical application
+				hosting. For the busines case, all operation costs including
+				platform services and transition will be used.
+			</description>
+		</alternative>
+
+		<!-- <alternative> <name>Keep Current Mode of Operation</name> <description>Don't 
+			change the current mode of operation. NOTE: This Mode must be reworked according 
+			to the concrete customer situation. The figures inside are only very rough 
+			dummies.</description> </alternative> -->
+	</alternatives>
+	<goals>
+		<goal>
+			<name>Cost</name>
+			<description>Total cost of ownership of one (set of) application(s)
+				calculated on the assumed runtime.
+			</description>
+			<goalType>NEGATIVE</goalType>
+			<children>
+				<criterion>
+					<name>Operating Costs</name>
+					<description></description>
+					<type>qualitative</type>
+					<weight></weight>
+					<children>
+						<criterion>
+							<name>Infrastructure (depreciation)</name>
+							<description></description>
+							<type>quantitative</type>
+							<weight></weight>
+							<metric>$ total</metric>
+							<children></children>
+							<criterionImportances></criterionImportances>
+						</criterion>
+						<criterion>
+							<name>Infrastructure Services</name>
+							<description></description>
+							<type>quantitative</type>
+							<weight></weight>
+							<metric>$ total</metric>
+							<children></children>
+							<criterionImportances></criterionImportances>
+						</criterion>
+						<criterion>
+							<name>Platform Services</name>
+							<description></description>
+							<type>quantitative</type>
+							<weight></weight>
+							<metric>$ total</metric>
+							<children></children>
+							<criterionImportances></criterionImportances>
+						</criterion>
+						<criterion>
+							<name>Application Management Services</name>
+							<description></description>
+							<type>quantitative</type>
+							<weight></weight>
+							<metric>$ total</metric>
+							<children></children>
+							<criterionImportances></criterionImportances>
+						</criterion>
+					</children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Transformation and Transaction Costs</name>
+					<description>Costs aggregated from costs for transformation and
+						costs for transition and migration. Use an Excel tool to calculate
+						the overall costs value (in $).
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<metric>$ total</metric>
+					<!-- <children> <criterion> <name>Transition and Migration</name> <description></description> 
+						<type>quantitative</type> <weight></weight> <children></children> <criterionImportances></criterionImportances> 
+						</criterion> <criterion> <name>Transformation</name> <description></description> 
+						<type>quantitative</type> <weight></weight> <children></children> <criterionImportances></criterionImportances> 
+						</criterion> </children> -->
+					<criterionImportances></criterionImportances>
+				</criterion>
+			</children>
+			<importanceChildren></importanceChildren>
+		</goal>
+		<goal>
+			<name>Quality</name>
+			<description>operational stability of the solution, measured against
+				customer given SLA perhaps on different levels.
+			</description>
+			<goalType>POSITIVE</goalType>
+			<children>
+				<criterion>
+					<name>Average Availability</name>
+					<description>Typical ##.##% SLA possibly measured on various levels
+						(application, platform, infrastructure)
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<metric>% per month</metric>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Operability with offered Services</name>
+					<description>How many components can be realized with the service
+						alternative? (in %)
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<metric>%</metric>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Computing Power (Landscape Peak)</name>
+					<description>Maximum total tpmC provided per landscape
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<metric>tpmC</metric>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Computing Power (Total Peak)</name>
+					<description>Maximum total tpmC provided overall
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<metric>tpmC</metric>
+					<criterionImportances></criterionImportances>
+				</criterion>
+			</children>
+			<importanceChildren></importanceChildren>
+		</goal>
+		<goal>
+			<name>Limitations</name>
+			<description>Limitations of the Alternative</description>
+			<goalType>NEGATIVE</goalType>
+			<children>
+				<criterion>
+					<name>Monthly Downtimes</name>
+					<description>Hours of planned downtime (per month)</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<metric>h</metric>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Mean time to Response</name>
+					<description>Delay until first response (in hours)
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<metric>h</metric>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Mean time to React</name>
+					<description>Delay until initiation of countermeasures (in hours)
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<metric>h</metric>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Mean time to Recover</name>
+					<description>Delay until recovery is complete (in hours)
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<metric>h</metric>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Product Portfolio Heterogenity</name>
+					<description>Number of employed products in different product
+						groups (heterogenity index)
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<metric>heterogenity index</metric>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Roadmap Compliance</name>
+					<description>Number of detours/discrepancies from the roadmap (in
+						%)
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<metric>%</metric>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+			</children>
+			<importanceChildren></importanceChildren>
+		</goal>
+		<goal>
+			<name>Flexibility</name>
+			<description>General ability to adapt to changed quantative
+				requirements
+			</description>
+			<goalType>POSITIVE</goalType>
+			<children>
+				<criterion>
+					<name>Workload Share</name>
+					<description>Time to move workloads between existing operating
+						platforms
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Scalability</name>
+					<description>Time to scale up/down</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+				<criterion>
+					<name>Financial</name>
+					<description>linear impact of scaling changes to running costs (pay
+						what you use)
+					</description>
+					<type>quantitative</type>
+					<weight></weight>
+					<children></children>
+					<criterionImportances></criterionImportances>
+				</criterion>
+			</children>
+			<importanceChildren></importanceChildren>
+		</goal>
+	</goals>
+	<importanceGoals>
+	</importanceGoals>
+</decisionTemplate>

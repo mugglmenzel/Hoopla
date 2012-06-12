@@ -1,0 +1,66 @@
+<List>
+
+<requirements>
+<requirementId>2</requirementId>
+<name>The datacenter must be in Europe.</name>
+<type></type>
+<isChildof>1</isChildof>
+<isSelected>true</isSelected>
+</requirements>
+
+<requirements>
+<requirementId>3</requirementId>
+<name>The API must be compatible with Amazon Web Services.</name>
+<type></type>
+<isChildof>1</isChildof>
+<isSelected>false</isSelected>
+</requirements>
+
+<requirements>
+<requirementId>4</requirementId>
+<name>The Cloud Services can be monitored.</name>
+<type></type>
+<isChildof>1</isChildof>
+<isSelected>false</isSelected>
+</requirements>
+
+<requirements>
+<requirementId>4</requirementId>
+<name>The Cloud Computing Provider offers a relational database service.</name>
+<type></type>
+<isChildof>1</isChildof>
+<isSelected>false</isSelected>
+</requirements>
+
+<requirements>
+<requirementId>5</requirementId>
+<name>The Cloud Computing Provider offers Linux for their virtual machines.</name>
+<type></type>
+<isChildof>1</isChildof>
+<isSelected>false</isSelected>
+</requirements>
+
+<requirements>
+<requirementId>6</requirementId>
+<name>The Cloud Computing Provider offers Windows as virtual machines.</name>
+<type></type>
+<isChildof>1</isChildof>
+<isSelected>false</isSelected>
+</requirements>
+
+<requirements>
+<requirementId>7</requirementId>
+<name>The Cloud Computing Provider offers Windows as virtual machines.</name>
+<type></type>
+<isChildof>1</isChildof>
+<isSelected>false</isSelected>
+</requirements>
+<requirements>
+
+<requirementId>8</requirementId>
+<name>The Cloud Computing Provider supports VmWare images.</name>
+<type></type>
+<isChildof>1</isChildof>
+<isSelected>false</isSelected>
+</requirements>
+</List>

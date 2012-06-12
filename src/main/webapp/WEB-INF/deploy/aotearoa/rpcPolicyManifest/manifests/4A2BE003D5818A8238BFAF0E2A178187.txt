@@ -1,0 +1,2 @@
+serviceClass: de.fzi.aotearoa.client.services.AotearoaService
+path: EAAAB27CBD8D59DE085497CF6459F171.gwt.rpc

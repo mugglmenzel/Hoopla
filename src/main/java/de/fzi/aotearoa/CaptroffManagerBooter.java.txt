@@ -1,0 +1,302 @@
+package de.fzi.aotearoa;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.io.PrintStream;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.ws.Endpoint;
+
+import org.apache.cassandra.config.DatabaseDescriptor;
+import org.apache.cassandra.tools.NodeProbe;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.xml.serialize.OutputFormat;
+import org.apache.xml.serialize.XMLSerializer;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.amazonaws.auth.PropertiesCredentials;
+import com.amazonaws.services.ec2.AmazonEC2;
+import com.amazonaws.services.ec2.AmazonEC2Client;
+import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
+import com.amazonaws.services.ec2.model.Filter;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+
+import edu.kit.eorg.captroff.manager.webservice.CaptroffManagerWebservice;
+
+/**
+ * 
+ * Boot class that initiates this distribution node. The static void main
+ * initializes the DistributionManagerNode which contains the major part of the
+ * business logic. Next, a web service interface is published and the node
+ * registers its message queue (SQS) at an central notifier service (SNS), that
+ * helps organizing the (quorum) network. Finally, a new thread is started that
+ * permanently checks the message queue for new network organization commands
+ * and sends "i'm alive" messages frequently.
+ * 
+ * @author menzel
+ * 
+ * 
+ */
+
+public class CaptroffManagerBooter {
+
+	private static Endpoint endpoint;
+
+	private static String S3Bucket = "ring-of-fire-testbed-eorg-kit-edu";
+
+	private static Logger log = Logger.getLogger(CaptroffManagerBooter.class);
+	
+	private static Integer numberOfNodes = 8;
+
+	public static void main(String[] args) {
+		PropertyConfigurator.configure("conf/log4j.properties");
+
+		// needed for DatabaseDescriptor to run properly:
+		System.setProperty("storage-config", "cassandra" + File.separator
+				+ "conf");
+		log.info("set system property \"storage-config\" to "
+				+ System.getProperty("storage-config"));
+
+		/*
+		 * log.info("starting cassandra ..."); Thread t = new Thread(new
+		 * Runnable() {
+		 * 
+		 * @Override public void run() { System.setProperty("storage-config",
+		 * "conf"); System.setProperty("cassandra-foreground", "no");
+		 * CassandraDaemon.main(null); } }); t.setDaemon(true); t.start(); try {
+		 * Thread.sleep(5000); } catch (InterruptedException e) {
+		 * e.printStackTrace(); } log.info("cassandra started.");
+		 */
+
+		log.info("bootstrapping cassandra seed  ...");
+		bootstrapSeedS3();
+		log.info("cassandra seed added to storage-conf.xml file.");
+
+		/*
+		log.info("initializing adaptivity component ...");
+		DistributionManagerNode.initialize();
+		log.info("adaptivity component initialized.");
+
+		log.info("registering web service interface ...");
+		initializeWebservice();
+		log.info("web service interface registered.");
+		 */
+	}
+
+	private static void bootstrapSeedS3() {
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			log.info("determined local IP address " + addr.getHostAddress());
+			log.info("determined local hostname " + addr.getHostName());
+			AmazonEC2 ec2 = new AmazonEC2Client(new PropertiesCredentials(
+					CaptroffManagerBooter.class
+							.getResourceAsStream("AwsCredentials.properties")));
+			DescribeInstancesRequest dir = new DescribeInstancesRequest();
+			List<String> ipAddress = new ArrayList<String>();
+			ipAddress.add(addr.getHostAddress());
+			dir.getFilters().add(new Filter("private-ip-address", ipAddress));
+			String publicIP = ec2.describeInstances(dir).getReservations().get(
+					0).getInstances().get(0).getPublicIpAddress();
+			log.info("determined public IP address " + publicIP);
+
+			AmazonS3 s3 = new AmazonS3Client(new PropertiesCredentials(
+					CaptroffManagerBooter.class
+							.getResourceAsStream("AwsCredentials.properties")));
+			if (!s3.doesBucketExist(S3Bucket)) {
+				log.warn("S3 bucket for registering doesn't exist.");
+				s3.createBucket(S3Bucket);
+			}
+			PipedInputStream pis = new PipedInputStream();
+			PrintStream ps = new PrintStream(new PipedOutputStream(pis));
+			try {
+				DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder docBuilder = docBuilderFactory
+						.newDocumentBuilder();
+				log.info("reading storage-conf.xml.");
+				Document doc = docBuilder.parse(new File(System
+						.getProperty("storage-config")
+						+ "/storage-conf.xml"));
+
+				int numberOfSeeds = 0;
+				
+				if (s3.listObjects(
+						new ListObjectsRequest().withBucketName(S3Bucket)
+								.withPrefix("seed")).getObjectSummaries()
+						.size() > 0) {
+					try {
+						S3Object seed = s3.getObject(new GetObjectRequest(
+								S3Bucket, "seed"));
+						BufferedReader br = new BufferedReader(
+								new InputStreamReader(seed.getObjectContent()));
+
+						String line = "";
+						while ((line = br.readLine()) != null) {
+							// line
+							if (!line.equals(addr.getHostAddress())) {
+
+								// if online add to cassandra seeds and keep in
+								// seed file
+								try {
+									new NodeProbe(line);
+
+									Element seedElement = doc
+											.createElement("Seed");
+									seedElement.appendChild(doc
+											.createTextNode(line));
+									doc.getDocumentElement()
+											.getElementsByTagName("Seeds")
+											.item(0).appendChild(seedElement);
+
+									ps.println(line);
+									numberOfSeeds++;
+								} catch (Exception e) {
+									log.error("Node " + line
+											+ " not alive anymore.");
+								} 
+							}
+						}
+
+					} catch (Exception e) {
+						log.error("Couldn't read seed file from s3 bucket "
+								+ S3Bucket + "!");
+					}
+
+				} else {
+					s3.putObject(S3Bucket, "seed", new ByteArrayInputStream(""
+							.getBytes()), new ObjectMetadata());
+					Element bootstrap = ((Element) doc.getDocumentElement()
+							.getElementsByTagName("AutoBootstrap").item(0));
+					bootstrap.replaceChild(doc.createTextNode("false"),
+							bootstrap.getFirstChild());
+					Element seedElement = doc.createElement("Seed");
+					seedElement.appendChild(doc.createTextNode(addr
+							.getHostAddress()));
+					doc.getDocumentElement().getElementsByTagName("Seeds")
+							.item(0).appendChild(seedElement);
+				}
+
+				Element listenAddr = ((Element) doc.getDocumentElement()
+						.getElementsByTagName("ListenAddress").item(0));
+				listenAddr.replaceChild(doc.createTextNode(addr
+						.getHostAddress()), listenAddr.getFirstChild());
+				Element thriftAddr = ((Element) doc.getDocumentElement()
+						.getElementsByTagName("ThriftAddress").item(0));
+				thriftAddr.replaceChild(doc.createTextNode(addr
+						.getHostAddress()), thriftAddr.getFirstChild());
+				Element initialToken = ((Element) doc.getDocumentElement()
+						.getElementsByTagName("InitialToken").item(0));
+				
+				initialToken.appendChild(doc.createTextNode(new BigInteger(new Integer(numberOfSeeds).toString()).multiply(new BigInteger("2").pow(127).divide(new BigInteger(numberOfNodes.toString()))).toString()));
+				log.info("found " + numberOfSeeds + " seeds.");
+
+				log.info("preparing XML serializer.");
+				XMLSerializer ser = new XMLSerializer(new FileOutputStream(
+						new File(System.getProperty("storage-config")
+								+ "/storage-conf.xml")), new OutputFormat());
+				log.info("writing storage-conf.xml.");
+				ser.serialize(doc);
+
+				ps.println(addr.getHostAddress());
+				ps.close();
+
+				log.info("Writing seed file to S3.");
+				s3.putObject(new PutObjectRequest(S3Bucket, "seed", pis,
+						new ObjectMetadata()));
+
+			} catch (Exception e) {
+				log.error("Altering storage-conf.xml to update seeds failed.",
+						e);
+			}
+
+			pis = new PipedInputStream();
+			ps = new PrintStream(new PipedOutputStream(pis));
+			if (s3.listObjects(
+					new ListObjectsRequest().withBucketName(S3Bucket)
+							.withPrefix("nodes")).getObjectSummaries().size() > 0) {
+				try {
+					S3Object nodes = s3.getObject(new GetObjectRequest(
+							S3Bucket, "nodes"));
+
+					BufferedReader br = new BufferedReader(
+							new InputStreamReader(nodes.getObjectContent()));
+					String line = "";
+					while ((line = br.readLine()) != null) {
+						ps.println(line);
+					}
+
+				} catch (Exception e) {
+					log.error("Couldn't read nodes file from s3 bucket "
+							+ S3Bucket + "!");
+				}
+			} else {
+				s3.putObject(S3Bucket, "nodes", new ByteArrayInputStream(""
+						.getBytes()), new ObjectMetadata());
+			}
+
+			ps.println(publicIP);
+			ps.close();
+			log.info("Writing nodes file to S3.");
+			s3.putObject(new PutObjectRequest(S3Bucket, "nodes", pis,
+					new ObjectMetadata()));
+
+		} catch (UnknownHostException e0) {
+			log.error("Determining host's address failed.", e0);
+		} catch (IOException e) {
+			log.error("Can't access S3 due to missing credentials file.", e);
+		} catch (Exception ex) {
+			log.error("Accessing S3 failed.", ex);
+		}
+	}
+
+	private static void initializeWebservice() {
+		Logger log = Logger.getLogger(CaptroffManagerBooter.class);
+
+		String host = DatabaseDescriptor.getThriftAddress().getHostAddress();
+		setEndpoint(Endpoint.create(new CaptroffManagerWebservice()));
+		int port = 8880;
+		while (!getEndpoint().isPublished()) {
+			try {
+				getEndpoint().publish(
+						"http://" + host + ":" + port
+								+ "/CaptroffManagerWebservice");
+			} catch (Exception e) {
+				log.error("Endpoint " + "http://" + host + ":" + port
+						+ "/CaptroffManagerWebservice"
+						+ " could not be published.");
+			}
+			port++;
+		}
+		log.info("Webservice registered at " + "http://" + host + ":" + --port
+				+ "/CaptroffManagerWebservice");
+	}
+
+	private static Endpoint getEndpoint() {
+		return endpoint;
+	}
+
+	private static void setEndpoint(Endpoint endpoint) {
+		CaptroffManagerBooter.endpoint = endpoint;
+	}
+
+}

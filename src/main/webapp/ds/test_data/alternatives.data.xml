@@ -1,0 +1,32 @@
+<List>
+<alternative>
+<name>Amazon AWS EC2</name>
+<value>0.5</value>
+<goal1>Reduce Costs</goal1>
+<valueg1>0.25</valueg1>
+<goal2>Performance</goal2>
+<valueg2>0.6</valueg2>
+<goal3>Technical Support</goal3>
+<valueg3>0.15</valueg3>
+</alternative>
+<alternative>
+<name>Own Data Center</name>
+<value>0.375</value>
+<goal1>Reduce Costs</goal1>
+<valueg1>0.25</valueg1>
+<goal2>Performance</goal2>
+<valueg2>0.6</valueg2>
+<goal3>Technical Support</goal3>
+<valueg3>0.15</valueg3>
+</alternative>
+<alternative>
+<name>Web Hosting</name>
+<value>0.125</value>
+<goal1>Reduce Costs</goal1>
+<valueg1>0.25</valueg1>
+<goal2>Performance</goal2>
+<valueg2>0.6</valueg2>
+<goal3>Technical Support</goal3>
+<valueg3>0.15</valueg3>
+</alternative>
+</List>

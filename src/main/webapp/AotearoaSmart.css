@@ -1,0 +1,82 @@
+@CHARSET "ISO-8859-1";  /** Add css rules here for your application. */
+body {
+	background-color: #ffffff;
+	background-image: url(/bg.png);
+	background-repeat: repeat-y;
+}
+
+h1 {
+	font-size: 2em;
+	font-weight: bold;
+	color: black;
+	margin: 40px 0px 70px;
+	text-align: center;
+}
+
+.content {
+	
+}
+
+.heading {
+	font-size: 2em;
+	font-weight: bold;
+	text-decoration: underline;
+	color: black;
+	padding-left: 20px;
+}
+
+.instructions {
+	font-size: 12pt;
+	color: #333333;
+	padding-left: 20px;
+	margin-bottom: 20px;
+}
+
+.formheader {
+	font-size: 11pt;
+	color: black;
+	text-decoration: underline;
+	padding-left: 30px;
+	margin-bottom: 10px;
+}
+
+.formheader2 {
+	font-size: 10pt;
+	color: #333333;
+	padding-left: 30px;
+	margin-bottom: 5px;
+}
+
+.innerheader {
+	font-size: 1.5em;
+	padding-left: 30px;
+}
+
+.button {
+	padding-top: 10px;
+	padding-left: 40px;
+	left: 50px;
+}
+
+.postit {
+	padding-left: 15px;
+	padding-top: 5px;
+	padding-right: 15px;
+	padding-bottom: 40px;
+}
+
+.postitHeader {
+	font-size: 14pt;
+	font-weight: bold;
+	text-decoration: underline;
+	color: black;
+	padding-left: 15px;
+	padding-top: 50px;
+	padding-right: 15px;
+}
+
+.contact {
+	font-size: 9pt;
+	font-weight: bold;
+	color: black;
+}

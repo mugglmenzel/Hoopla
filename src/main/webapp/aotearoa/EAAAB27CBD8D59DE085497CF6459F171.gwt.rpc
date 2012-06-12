@@ -1,0 +1,107 @@
+com.google.gwt.event.shared.UmbrellaException, true, true, false, false, com.google.gwt.event.shared.UmbrellaException/3104463596, 3104463596
+com.google.gwt.http.client.RequestException, true, true, false, false, com.google.gwt.http.client.RequestException/190587325, 190587325
+com.google.gwt.json.client.JSONException, true, true, false, false, com.google.gwt.json.client.JSONException/2941795468, 2941795468
+com.google.gwt.jsonp.client.TimeoutException, true, true, false, false, com.google.gwt.jsonp.client.TimeoutException/1112787596, 1112787596
+com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException, true, true, true, true, com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException/3936916533, 3936916533
+com.google.gwt.user.client.rpc.InvocationException, true, false, false, false, com.google.gwt.user.client.rpc.InvocationException/1510557512, 1510557512
+com.google.gwt.user.client.rpc.RpcTokenException, true, true, false, false, com.google.gwt.user.client.rpc.RpcTokenException/2345075298, 2345075298
+com.google.gwt.user.client.rpc.SerializableException, true, true, false, false, com.google.gwt.user.client.rpc.SerializableException/3047383460, 3047383460
+com.google.gwt.user.client.rpc.SerializationException, true, true, false, false, com.google.gwt.user.client.rpc.SerializationException/2836333220, 2836333220
+com.google.gwt.user.client.rpc.ServiceDefTarget$NoServiceEntryPointSpecifiedException, true, true, false, false, com.google.gwt.user.client.rpc.ServiceDefTarget$NoServiceEntryPointSpecifiedException/3408313447, 3408313447
+com.google.gwt.user.client.rpc.XsrfToken, false, false, true, true, com.google.gwt.user.client.rpc.XsrfToken/4254043109, 4254043109
+com.google.gwt.xml.client.DOMException, true, false, false, false, com.google.gwt.xml.client.DOMException/4182906963, 4182906963
+com.google.gwt.xml.client.impl.DOMParseException, true, true, false, false, com.google.gwt.xml.client.impl.DOMParseException/3799120635, 3799120635
+com.google.web.bindery.event.shared.UmbrellaException, true, true, false, false, com.google.web.bindery.event.shared.UmbrellaException/1025846929, 1025846929
+de.fzi.aotearoa.client.services.AotearoaService, false, false, false, false, _, 1843780000
+de.fzi.aotearoa.shared.model.ahp.configuration.Alternative, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.configuration.Alternative/3631755373, 3631755373
+@ClientFields,de.fzi.aotearoa.shared.model.ahp.configuration.Alternative,id,name,description,decision
+[Lde.fzi.aotearoa.shared.model.ahp.configuration.Alternative;, true, true, true, true, [Lde.fzi.aotearoa.shared.model.ahp.configuration.Alternative;/4192178532, 4192178532
+de.fzi.aotearoa.shared.model.ahp.configuration.Criterion, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.configuration.Criterion/3698260909, 3698260909
+@ClientFields,de.fzi.aotearoa.shared.model.ahp.configuration.Criterion,id,name,description,metric,url,type,weight,parent,importanceAlternatives,valuesAlternatives,importanceChildren,children
+de.fzi.aotearoa.shared.model.ahp.configuration.CriterionType, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.configuration.CriterionType/2441108560, 2441108560
+[Lde.fzi.aotearoa.shared.model.ahp.configuration.Criterion;, true, true, true, true, [Lde.fzi.aotearoa.shared.model.ahp.configuration.Criterion;/1300910608, 1300910608
+de.fzi.aotearoa.shared.model.ahp.configuration.Decision, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.configuration.Decision/1718904154, 1718904154
+@ClientFields,de.fzi.aotearoa.shared.model.ahp.configuration.Decision,id,keyId,userId,name,description,comment,alternatives,goals,requirements,importanceGoals
+de.fzi.aotearoa.shared.model.ahp.configuration.DecisionTemplate, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.configuration.DecisionTemplate/2295309824, 2295309824
+@ClientFields,de.fzi.aotearoa.shared.model.ahp.configuration.DecisionTemplate,templateName
+[Lde.fzi.aotearoa.shared.model.ahp.configuration.DecisionTemplate;, true, true, false, false, [Lde.fzi.aotearoa.shared.model.ahp.configuration.DecisionTemplate;/232094559, 232094559
+[Lde.fzi.aotearoa.shared.model.ahp.configuration.Decision;, true, true, false, false, [Lde.fzi.aotearoa.shared.model.ahp.configuration.Decision;/3590548050, 3590548050
+de.fzi.aotearoa.shared.model.ahp.configuration.Goal, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.configuration.Goal/475886101, 475886101
+@ClientFields,de.fzi.aotearoa.shared.model.ahp.configuration.Goal,decision,goalType
+de.fzi.aotearoa.shared.model.ahp.configuration.GoalType, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.configuration.GoalType/3660072947, 3660072947
+[Lde.fzi.aotearoa.shared.model.ahp.configuration.Goal;, true, true, true, true, [Lde.fzi.aotearoa.shared.model.ahp.configuration.Goal;/4184121343, 4184121343
+de.fzi.aotearoa.shared.model.ahp.values.AlternativeImportance, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.values.AlternativeImportance/2845384862, 2845384862
+@ClientFields,de.fzi.aotearoa.shared.model.ahp.values.AlternativeImportance,id,criterion,altA,altB,comparisonAToB,description
+[Lde.fzi.aotearoa.shared.model.ahp.values.AlternativeImportance;, true, true, true, true, [Lde.fzi.aotearoa.shared.model.ahp.values.AlternativeImportance;/1749364914, 1749364914
+de.fzi.aotearoa.shared.model.ahp.values.AlternativeValue, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.values.AlternativeValue/1889963584, 1889963584
+@ClientFields,de.fzi.aotearoa.shared.model.ahp.values.AlternativeValue,id,criterion,alt,value,description
+[Lde.fzi.aotearoa.shared.model.ahp.values.AlternativeValue;, true, true, true, true, [Lde.fzi.aotearoa.shared.model.ahp.values.AlternativeValue;/608707980, 608707980
+de.fzi.aotearoa.shared.model.ahp.values.CriterionImportance, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.values.CriterionImportance/3608379100, 3608379100
+@ClientFields,de.fzi.aotearoa.shared.model.ahp.values.CriterionImportance,id,parent,critA,critB,comparisonAToB,comment
+[Lde.fzi.aotearoa.shared.model.ahp.values.CriterionImportance;, true, true, true, true, [Lde.fzi.aotearoa.shared.model.ahp.values.CriterionImportance;/3425623248, 3425623248
+de.fzi.aotearoa.shared.model.ahp.values.Evaluation, false, false, true, true, de.fzi.aotearoa.shared.model.ahp.values.Evaluation/378223667, 378223667
+de.fzi.aotearoa.shared.model.ahp.values.EvaluationResult, true, true, false, false, de.fzi.aotearoa.shared.model.ahp.values.EvaluationResult/3659822768, 3659822768
+[Lde.fzi.aotearoa.shared.model.ahp.values.Evaluation;, false, false, true, true, [Lde.fzi.aotearoa.shared.model.ahp.values.Evaluation;/1977561121, 1977561121
+de.fzi.aotearoa.shared.model.ahp.values.GoalImportance, true, true, true, true, de.fzi.aotearoa.shared.model.ahp.values.GoalImportance/50676661, 50676661
+@ClientFields,de.fzi.aotearoa.shared.model.ahp.values.GoalImportance,id,decision,critA,critB,comparisonAToB,comment
+[Lde.fzi.aotearoa.shared.model.ahp.values.GoalImportance;, true, true, true, true, [Lde.fzi.aotearoa.shared.model.ahp.values.GoalImportance;/2397724784, 2397724784
+de.fzi.aotearoa.shared.model.jama.Matrix, false, false, true, true, de.fzi.aotearoa.shared.model.jama.Matrix/3655917123, 3655917123
+@ClientFields,de.fzi.aotearoa.shared.model.jama.Matrix,A,m,n
+[Lde.fzi.aotearoa.shared.model.jama.Matrix;, false, false, true, true, [Lde.fzi.aotearoa.shared.model.jama.Matrix;/1614997287, 1614997287
+[D, false, false, true, true, [D/2047612875, 2047612875
+[[D, false, false, true, true, [[D/158574334, 158574334
+java.io.IOException, true, true, false, false, java.io.IOException/1159940531, 1159940531
+java.io.UnsupportedEncodingException, true, true, false, false, java.io.UnsupportedEncodingException/1526756933, 1526756933
+java.lang.ArithmeticException, true, true, false, false, java.lang.ArithmeticException/1539622151, 1539622151
+java.lang.ArrayIndexOutOfBoundsException, true, true, false, false, java.lang.ArrayIndexOutOfBoundsException/600550433, 600550433
+java.lang.ArrayStoreException, true, true, false, false, java.lang.ArrayStoreException/3540507190, 3540507190
+java.lang.AssertionError, true, true, false, false, java.lang.AssertionError/3490171458, 3490171458
+java.lang.Boolean, true, true, false, false, java.lang.Boolean/476441737, 476441737
+java.lang.ClassCastException, true, true, false, false, java.lang.ClassCastException/702295179, 702295179
+java.lang.Double, true, true, true, true, java.lang.Double/858496421, 858496421
+java.lang.Error, true, true, false, false, java.lang.Error/1331973429, 1331973429
+java.lang.Exception, true, true, true, false, java.lang.Exception/1920171873, 1920171873
+java.lang.IllegalArgumentException, true, true, false, false, java.lang.IllegalArgumentException/1755012560, 1755012560
+java.lang.IllegalStateException, true, true, false, false, java.lang.IllegalStateException/1972187323, 1972187323
+java.lang.IndexOutOfBoundsException, true, true, false, false, java.lang.IndexOutOfBoundsException/2489527753, 2489527753
+java.lang.Long, true, true, true, true, java.lang.Long/4227064769, 4227064769
+java.lang.NegativeArraySizeException, true, true, false, false, java.lang.NegativeArraySizeException/3846860241, 3846860241
+java.lang.NullPointerException, true, true, false, false, java.lang.NullPointerException/1463492344, 1463492344
+java.lang.Number, true, false, true, false, java.lang.Number/300033342, 300033342
+java.lang.NumberFormatException, true, true, false, false, java.lang.NumberFormatException/3305228476, 3305228476
+java.lang.RuntimeException, true, true, true, false, java.lang.RuntimeException/515124647, 515124647
+java.lang.String, true, true, true, true, java.lang.String/2004016611, 2004016611
+java.lang.StringIndexOutOfBoundsException, true, true, false, false, java.lang.StringIndexOutOfBoundsException/500777603, 500777603
+java.lang.Throwable, true, true, true, false, java.lang.Throwable/2953622131, 2953622131
+java.lang.UnsupportedOperationException, true, true, false, false, java.lang.UnsupportedOperationException/3744010015, 3744010015
+java.lang.annotation.AnnotationFormatError, true, true, false, false, java.lang.annotation.AnnotationFormatError/2257184627, 2257184627
+java.lang.annotation.AnnotationTypeMismatchException, true, true, false, false, java.lang.annotation.AnnotationTypeMismatchException/976205828, 976205828
+java.security.DigestException, true, true, false, false, java.security.DigestException/629316798, 629316798
+java.security.GeneralSecurityException, true, true, false, false, java.security.GeneralSecurityException/2669239907, 2669239907
+java.security.NoSuchAlgorithmException, true, true, false, false, java.security.NoSuchAlgorithmException/2892037213, 2892037213
+java.util.ArrayList, true, true, true, true, java.util.ArrayList/4159755760, 4159755760
+java.util.Arrays$ArrayList, true, true, true, true, java.util.Arrays$ArrayList/2507071751, 2507071751
+java.util.Collections$EmptyList, true, true, true, true, java.util.Collections$EmptyList/4157118744, 4157118744
+java.util.Collections$EmptyMap, true, true, false, false, java.util.Collections$EmptyMap/4174664486, 4174664486
+java.util.Collections$EmptySet, true, true, false, false, java.util.Collections$EmptySet/3523698179, 3523698179
+java.util.Collections$SingletonList, true, true, true, true, java.util.Collections$SingletonList/1586180994, 1586180994
+java.util.ConcurrentModificationException, true, true, false, false, java.util.ConcurrentModificationException/2717383897, 2717383897
+java.util.EmptyStackException, true, true, false, false, java.util.EmptyStackException/89438517, 89438517
+java.util.HashMap, true, true, false, false, java.util.HashMap/1797211028, 1797211028
+java.util.HashSet, true, true, false, false, java.util.HashSet/3273092938, 3273092938
+java.util.IdentityHashMap, true, true, false, false, java.util.IdentityHashMap/1839153020, 1839153020
+java.util.LinkedHashMap, true, true, false, false, java.util.LinkedHashMap/3008245022, 3008245022
+java.util.LinkedHashSet, true, true, false, false, java.util.LinkedHashSet/1826081506, 1826081506
+java.util.LinkedList, true, true, true, true, java.util.LinkedList/3953877921, 3953877921
+java.util.NoSuchElementException, true, true, false, false, java.util.NoSuchElementException/1559248883, 1559248883
+java.util.Stack, true, true, true, true, java.util.Stack/1346942793, 1346942793
+java.util.TooManyListenersException, true, true, false, false, java.util.TooManyListenersException/2023078032, 2023078032
+java.util.TreeMap, true, true, false, false, java.util.TreeMap/1493889780, 1493889780
+java.util.TreeSet, true, true, false, false, java.util.TreeSet/4043497002, 4043497002
+java.util.Vector, true, true, true, true, java.util.Vector/3057315478, 3057315478
+javax.validation.ConstraintDeclarationException, true, true, false, false, javax.validation.ConstraintDeclarationException/3610544007, 3610544007
+javax.validation.ConstraintDefinitionException, true, true, false, false, javax.validation.ConstraintDefinitionException/3732439488, 3732439488
+javax.validation.ConstraintViolationException, true, true, false, false, javax.validation.ConstraintViolationException/1185386591, 1185386591
+javax.validation.GroupDefinitionException, true, true, false, false, javax.validation.GroupDefinitionException/4024780846, 4024780846
+javax.validation.UnexpectedTypeException, true, true, false, false, javax.validation.UnexpectedTypeException/593026390, 593026390
+javax.validation.ValidationException, true, true, false, false, javax.validation.ValidationException/1570221831, 1570221831

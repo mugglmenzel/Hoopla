@@ -1,0 +1,111 @@
+<decisionTemplate>
+	<name>newDecision</name>
+	<description>description decision</description>
+	<templateName>TestTemplate</templateName>
+	<alternatives>
+		<alternative>
+			<name>a1</name>
+			<description>descr a1</description>
+		</alternative>
+        <alternative>
+            <name>a2</name>
+			<description>descr a2</description>
+        </alternative>
+        <alternative>
+            <name>a3</name>
+			<description>descr a3</description>
+        </alternative>
+	</alternatives>
+	<goals>
+		<goal>
+			<name>goalA</name>
+			<description>goalA descr</description>
+			<goalType>POSITIVE</goalType>
+			<children>
+				<criterion>
+					<name>crit1</name>
+					<description>crit1 descr</description>
+					<type>quantitative</type>
+					<weight>0.7</weight>
+					<children>
+						<criterion>
+                            <name>crit11</name>
+                            <description>crit11 descr</description>
+                            <type>quantitative</type>
+                            <weight>0.3</weight>
+                            <children></children>
+                            <importanceChildren></importanceChildren>
+                        </criterion>
+                        <criterion>
+                            <name>crit12</name>
+                            <description>crit12 descr</description>
+                            <type>qualitative</type>
+                            <weight>0.2</weight>
+                            <children></children>
+                            <importanceChildren></importanceChildren>
+                        </criterion>
+                        <criterion>
+                            <name>crit13</name>
+                            <description>crit13 descr</description>
+                            <type>benchmark</type>
+                            <weight>0.5</weight>
+                            <children></children>
+                            <importanceChildren></importanceChildren>
+                        </criterion>
+					</children>
+                    <importanceChildren>
+                        <criterionImportance>
+                            <critA>0</critA>
+                            <critB>1</critB>
+                            <comparisonAToB>0.5</comparisonAToB>
+                            <comment>comment1</comment>
+                        </criterionImportance>
+                        <criterionImportance>
+                            <critA>0</critA>
+                            <critB>2</critB>
+                            <comparisonAToB>3</comparisonAToB>
+                            <comment>comment2</comment>
+                        </criterionImportance>
+                        <criterionImportance>
+                            <critA>1</critA>
+                            <critB>2</critB>
+                            <comparisonAToB>0.1</comparisonAToB>
+                            <comment>comment3</comment>
+                        </criterionImportance>
+                    </importanceChildren>
+                </criterion>
+                <criterion>
+                    <name>crit2</name>
+                    <description>crit2 descr</description>
+					<type>quantitative</type>
+					<weight>0.3</weight>
+					<children></children>
+                    <importanceChildren></importanceChildren>
+				</criterion>
+			</children>
+            <importanceChildren>
+                <criterionImportance>
+                    <critA>0</critA>
+                    <critB>1</critB>
+                    <comparisonAToB>7</comparisonAToB>
+                    <comment>comment test</comment>
+                </criterionImportance>
+            </importanceChildren>
+		</goal>
+        <goal>
+            <name>goalB</name>
+			<description>goalB descr</description>
+			<goalType>POSITIVE</goalType>
+			<children></children>
+            <importanceChildren></importanceChildren>
+        </goal>
+	</goals>
+	<importanceGoals>
+		<goalImportance>
+			<critA>0</critA>
+			<critB>1</critB>
+			<comparisonAToB>0.5</comparisonAToB>
+			<comment>Dies ist ein comment</comment>
+		</goalImportance>
+	</importanceGoals>
+</decisionTemplate>
