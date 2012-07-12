@@ -1,4 +1,0 @@
-# Module aotearoa
-# RPC service class, partial path of RPC policy file
-de.fzi.aotearoa.client.services.AotearoaService, EAAAB27CBD8D59DE085497CF6459F171.gwt.rpc
-de.fzi.aotearoa.client.services.LoginService, 7190ACA6B7EB1F4B460CE791DB414F73.gwt.rpc

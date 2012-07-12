@@ -6,51 +6,51 @@
 <web-app>
 	<icon></icon>
 
-	
+
 	<!-- Servlets -->
 	<servlet>
-		<servlet-name>AotearoaServiceImpl</servlet-name>
-		<servlet-class>de.fzi.aotearoa.server.services.AotearoaServiceImpl</servlet-class>
+		<servlet-name>HooplaServiceImpl</servlet-name>
+		<servlet-class>de.eorganization.hoopla.server.services.HooplaServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>AotearoaServiceImpl</servlet-name>
-		<url-pattern>/aotearoa/aotearoa</url-pattern>
+		<servlet-name>HooplaServiceImpl</servlet-name>
+		<url-pattern>/hoopla/hoopla</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>loginService</servlet-name>
-		<servlet-class>de.fzi.aotearoa.server.services.LoginServiceImpl</servlet-class>
+		<servlet-class>de.eorganization.hoopla.server.services.LoginServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>loginService</servlet-name>
-		<url-pattern>/aotearoa/login</url-pattern>
+		<url-pattern>/hoopla/login</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>templateImport</servlet-name>
-		<servlet-class>de.fzi.aotearoa.server.servlets.TemplateImportServlet</servlet-class>
+		<servlet-class>de.eorganization.hoopla.server.servlets.TemplateImportServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>templateImport</servlet-name>
-		<url-pattern>/aotearoa/import</url-pattern>
+		<url-pattern>/hoopla/import</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>templateExport</servlet-name>
-		<servlet-class>de.fzi.aotearoa.server.servlets.TemplateExportServlet</servlet-class>
+		<servlet-class>de.eorganization.hoopla.server.servlets.TemplateExportServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>templateExport</servlet-name>
-		<url-pattern>/aotearoa/export</url-pattern>
+		<url-pattern>/hoopla/export</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- Default page to serve -->
 	<welcome-file-list>
-		<welcome-file>AotearoaSmart.html</welcome-file>
+		<welcome-file>Hoopla.html</welcome-file>
 	</welcome-file-list>
 
 </web-app>

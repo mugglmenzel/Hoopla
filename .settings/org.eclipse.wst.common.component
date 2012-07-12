@@ -1,8 +1,9 @@
-<project-modules id="moduleCoreId" project-version="2.0">
-  <wb-module deploy-name="the-maze">
-    <property name="context-root" value="the-maze"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+  <wb-module deploy-name="HooplaRide">
     <wb-resource deploy-path="/" source-path="src/main/webapp"/>
     <property name="java-output-path" value="/target/the-maze-1/WEB-INF/classes"/>
+        <property name="context-root" value="HooplaRide"/>
     <dependent-module archiveName="appengine-api-1.0-sdk-1.6.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/google/appengine/appengine-api-1.0-sdk/1.6.5/appengine-api-1.0-sdk-1.6.5.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
@@ -40,5 +41,9 @@
     <wb-resource deploy-path="/WEB-INF/classes" source-path="target/generated-sources/gwt"/>
     <wb-resource deploy-path="/WEB-INF/classes" source-path="target/generated-sources/apt"/>
     <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/gwt"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
   </wb-module>
 </project-modules>

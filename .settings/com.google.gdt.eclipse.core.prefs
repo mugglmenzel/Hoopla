@@ -1,3 +1,4 @@
 eclipse.preferences.version=1
-warSrcDir=war
+jarsExcludedFromWebInfLib=
+warSrcDir=src/main/webapp
 warSrcDirIsOutput=true

@@ -1,0 +1,2 @@
+serviceClass: de.eorganization.hoopla.client.services.LoginService
+path: 6CA9E9D18F6103AC8EBD70BD2C00533B.gwt.rpc

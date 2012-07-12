@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.eorganization</groupId>
-	<artifactId>the-maze</artifactId>
+	<artifactId>hooplaride</artifactId>
 	<version>1</version>
 	<packaging>war</packaging>
 	<properties>
-		<gae.version>1.6.5</gae.version>
+		<gae.version>1.7.0</gae.version>
 		<gae.application.version>1</gae.application.version>
 		<gwt.version>2.4.0</gwt.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -196,9 +196,10 @@
 					<appEngineVersion>${gae.version}</appEngineVersion>
 					<inplace>true</inplace>
 					<!-- <tomcat>${project.build.directory}/${project.build.finalName}/tomcat</tomcat> -->
-					<runTarget>AotearoaSmart.html</runTarget>
+					<runTarget>Hoopla.html</runTarget>
 					<copyWebapp>true</copyWebapp>
 					<compileReport>true</compileReport>
+
 				</configuration>
 				<dependencies>
 					<dependency>
@@ -364,11 +365,11 @@
 		</dependency>
 
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.google.appengine.orm</groupId>
 			<artifactId>datanucleus-appengine</artifactId>
 			<version>1.0.4.1</version>
-		</dependency>
+		</dependency> -->
 
 
 		<dependency>
@@ -476,7 +477,7 @@
 	<modules>
 	</modules>
 
-		<repositories>
+	<repositories>
 		<repository>
 			<id>maven2 central</id>
 			<url>http://repo1.maven.org/maven2</url>
@@ -506,6 +507,10 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
+		</repository>
+		<repository>
+			<id>twig</id>
+			<url>http://mvn.twig-persist.googlecode.com/hg</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
