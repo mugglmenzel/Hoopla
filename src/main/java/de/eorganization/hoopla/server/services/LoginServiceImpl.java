@@ -1,29 +1,38 @@
 package de.eorganization.hoopla.server.services;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.jdo.PersistenceManager;
+
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.eorganization.hoopla.client.services.LoginService;
-import de.eorganization.hoopla.shared.LoginInfo;
+import de.eorganization.hoopla.server.jdo.PersistenceManagerFactoryHelper;
+import de.eorganization.hoopla.shared.model.LoginInfo;
+import de.eorganization.hoopla.shared.model.Member;
+import de.eorganization.hoopla.shared.model.UserRole;
 
 /**
  * 
  * @author mugglmenzel
- *
+ * 
  *         Author: Michael Menzel (mugglmenzel)
  * 
  *         Last Change:
- *           
- *           By Author: $Author: mugglmenzel $ 
- *         
- *           Revision: $Revision: 170 $ 
- *         
- *           Date: $Date: 2011-08-05 16:48:05 +0200 (Fr, 05 Aug 2011) $
+ * 
+ *         By Author: $Author: mugglmenzel $
+ * 
+ *         Revision: $Revision: 170 $
+ * 
+ *         Date: $Date: 2011-08-05 16:48:05 +0200 (Fr, 05 Aug 2011) $
  * 
  *         License:
- *         
+ * 
  *         Copyright 2011 Forschungszentrum Informatik FZI / Karlsruhe Institute
  *         of Technology
  * 
@@ -39,36 +48,72 @@ import de.eorganization.hoopla.shared.LoginInfo;
  *         implied. See the License for the specific language governing
  *         permissions and limitations under the License.
  * 
- *         
- *         SVN URL: 
- *         $HeadURL: https://aotearoadecisions.googlecode.com/svn/trunk/src/main/java/de/fzi/aotearoa/server/services/LoginServiceImpl.java $
- *
+ * 
+ *         SVN URL: $HeadURL:
+ *         https://aotearoadecisions.googlecode.com/svn/trunk/
+ *         src/main/java/de/fzi/aotearoa/server/services/LoginServiceImpl.java $
+ * 
  */
 
-public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
+public class LoginServiceImpl extends RemoteServiceServlet implements
+		LoginService {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1447714256662875710L;
 
-	UserService userService = UserServiceFactory.getUserService();
+	private Logger log = Logger.getLogger(LoginServiceImpl.class.getName());
+
+	private UserService userService = UserServiceFactory.getUserService();
 
 	public LoginInfo login(String requestUri) {
-		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		LoginInfo loginInfo = new LoginInfo();
 
-		if (user != null) {
+		Member mbr = null;
+		if (userService.isUserLoggedIn() && user != null) {
+			mbr = getMember(user.getEmail());
+			if (mbr == null)
+				mbr = storeMember(new Member(user.getEmail(),
+						user.getNickname(),
+						userService.isUserAdmin() ? UserRole.ADMIN
+								: UserRole.USER));
+		}
+		if (mbr != null) {
 			loginInfo.setLoggedIn(true);
-			loginInfo.setEmailAddress(user.getEmail());
-			loginInfo.setNickname(user.getNickname());
+			loginInfo.setMember(mbr);
 			loginInfo.setLogoutUrl(userService.createLogoutURL(requestUri));
 		} else {
 			loginInfo.setLoggedIn(false);
 			loginInfo.setLoginUrl(userService.createLoginURL(requestUri));
 		}
 		return loginInfo;
+	}
+
+	public Member getMember(String email) {
+		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
+		Member memb = null;
+		try {
+			memb = pm.getObjectById(Member.class,
+					KeyFactory.createKey(Member.class.getSimpleName(), email));
+			memb = pm.detachCopy(memb);
+		} catch (Exception e) {
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
+		}
+		return memb;
+	}
+
+	public Member storeMember(Member member) {
+		if(member == null) return null;
+		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
+		try {
+			log.info("storing member " + member + " with id " + member.getEmail());
+			return pm.detachCopy(pm.makePersistent(member));
+		} catch (Exception e) {
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
+			return null;
+		}
 	}
 
 }

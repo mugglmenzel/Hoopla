@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -68,7 +70,8 @@ import de.eorganization.hoopla.shared.model.ahp.values.GoalImportance;
  *         SVN URL: $HeadURL:
  *         https://aotearoadecisions.googlecode.com/svn/trunk/
  *         src/main/java/de/fzi
- *         /aotearoa/de.eorganization.hoopla.shared.model/model/ahp/configuration/Alternative.java $
+ *         /aotearoa/de.eorganization.hoopla.shared.model/model
+ *         /ahp/configuration/Alternative.java $
  * 
  */
 public class TemplateImportServlet extends HttpServlet {
@@ -84,148 +87,124 @@ public class TemplateImportServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		DecisionTemplate newDecisionTemplate = new DecisionTemplate();
+		DecisionTemplate decisionTemplate = null;
 		try {
-
-			DecisionTemplate newDecisionTemplate = new DecisionTemplate();
 
 			ServletFileUpload upload = new ServletFileUpload();
 			resp.setContentType("text/plain");
 
-			FileItemIterator iterator = upload.getItemIterator(req);
-			while (iterator.hasNext()) {
-				FileItemStream item = iterator.next();
-				InputStream stream = item.openStream();
-
-				if (item.isFormField()) {
+			FileItemIterator itemIterator = upload.getItemIterator(req);
+			while (itemIterator.hasNext()) {
+				FileItemStream item = itemIterator.next();
+				if (item.isFormField()
+						&& "substituteTemplateId".equals(item.getFieldName())) {
 					log.warning("Got a form field: " + item.getFieldName());
+
+					String itemContent = IOUtils.toString(item.openStream());
+					try {
+						decisionTemplate = new HooplaServiceImpl()
+								.getDecisionTemplate(new Long(itemContent)
+										.longValue());
+					} catch (Exception e) {
+						log.log(Level.WARNING, e.getLocalizedMessage(), e);
+					}
+					if (decisionTemplate == null)
+						newDecisionTemplate.setKeyId(new Long(itemContent)
+								.longValue());
+					else
+						newDecisionTemplate.setKeyId(decisionTemplate
+								.getKeyId());
 				} else {
+					InputStream stream = item.openStream();
+
 					log.info("Got an uploaded file: " + item.getFieldName()
 							+ ", name = " + item.getName());
-				}
 
-				Document doc = DocumentBuilderFactory.newInstance()
-						.newDocumentBuilder().parse(stream);
+					Document doc = DocumentBuilderFactory.newInstance()
+							.newDocumentBuilder().parse(stream);
 
-				// doc.getDocumentElement().normalize();
+					// doc.getDocumentElement().normalize();
 
-				Element decisionElement = doc.getDocumentElement();
-				String rootName = decisionElement.getNodeName();
-				if (rootName.equals("decision")) {
-					isDecisionTemplate = false;
-				} else if (rootName.equals("decisionTemplate")) {
-					isDecisionTemplate = true;
-				} else {
-					log.warning("This XML Document has a wrong RootElement: "
-							+ rootName
-							+ ". It should be <decision> or <decisionTemplate>.");
-				}
+					Element decisionElement = doc.getDocumentElement();
+					String rootName = decisionElement.getNodeName();
+					if (rootName.equals("decision")) {
+						isDecisionTemplate = false;
+					} else if (rootName.equals("decisionTemplate")) {
+						isDecisionTemplate = true;
+					} else {
+						log.warning("This XML Document has a wrong RootElement: "
+								+ rootName
+								+ ". It should be <decision> or <decisionTemplate>.");
+					}
 
-				NodeList decisionNodes = decisionElement.getChildNodes();
-				for (int i = 0; i < decisionNodes.getLength(); i++) {
-					Node node = decisionNodes.item(i);
+					NodeList decisionNodes = decisionElement.getChildNodes();
+					for (int i = 0; i < decisionNodes.getLength(); i++) {
+						Node node = decisionNodes.item(i);
 
-					if (node instanceof Element) {
-						Element child = (Element) node;
-						if (child.getNodeName().equals("name")
-								&& !child.getTextContent().equals("")) {
-							newDecisionTemplate.setName(child.getTextContent());
-							log.info("Parsed decision name: "
-									+ newDecisionTemplate.getName());
-						}
-						if (child.getNodeName().equals("description")
-								&& !child.getTextContent().equals("")) {
-							newDecisionTemplate.setDescription(child
-									.getTextContent());
-							log.info("Parsed decision description: "
-									+ newDecisionTemplate.getDescription());
-						}
-						if (isDecisionTemplate
-								&& child.getNodeName().equals("templateName")) {
-							newDecisionTemplate.setTemplateName(child
-									.getTextContent());
-							log.info("Parsed decision TemplateName: "
-									+ newDecisionTemplate.getTemplateName());
-						}
-						if (child.getNodeName().equals("alternatives")) {
-							parseAlternatives(child.getChildNodes(),
-									newDecisionTemplate);
-						}
-						if (child.getNodeName().equals("goals")) {
-							parseGoals(child.getChildNodes(),
-									newDecisionTemplate);
-						}
-						if (child.getNodeName().equals("importanceGoals")) {
-							parseGoalImportances(child.getChildNodes(),
-									newDecisionTemplate);
+						if (node instanceof Element) {
+							Element child = (Element) node;
+							if (child.getNodeName().equals("name")
+									&& !child.getTextContent().equals("")) {
+								newDecisionTemplate.setName(child
+										.getTextContent());
+								log.info("Parsed decision name: "
+										+ newDecisionTemplate.getName());
+							}
+							if (child.getNodeName().equals("description")
+									&& !child.getTextContent().equals("")) {
+								newDecisionTemplate.setDescription(child
+										.getTextContent());
+								log.info("Parsed decision description: "
+										+ newDecisionTemplate.getDescription());
+							}
+							if (isDecisionTemplate
+									&& child.getNodeName().equals(
+											"templateName")) {
+								newDecisionTemplate.setTemplateName(child
+										.getTextContent());
+								log.info("Parsed decision TemplateName: "
+										+ newDecisionTemplate.getTemplateName());
+							}
+							if (child.getNodeName().equals("alternatives")) {
+								parseAlternatives(child.getChildNodes(),
+										newDecisionTemplate);
+							}
+							if (child.getNodeName().equals("goals")) {
+								parseGoals(child.getChildNodes(),
+										newDecisionTemplate);
+							}
+							if (child.getNodeName().equals("importanceGoals")) {
+								parseGoalImportances(child.getChildNodes(),
+										newDecisionTemplate);
+							}
 						}
 					}
+
+					log.info("Fully parsed XML Upload: "
+							+ newDecisionTemplate.toString());
+
 				}
-
-				// NodeList decNameElementList =
-				// doc.getElementsByTagName("name");
-				// Element decNameElement = (Element)
-				// decNameElementList.item(0);
-				// System.out.println("Decision Name: " +
-				// decNameElement.getNodeValue());
-				// newDecision.setName(decNameElement.getNodeValue());
-				//
-				// NodeList decDescrElementList =
-				// doc.getElementsByTagName("description");
-				// Element decDescrElement = (Element)
-				// decDescrElementList.item(0);
-				// System.out.println("Decision Descrption: " +
-				// decDescrElement.getNodeValue());
-				// newDecision.setDescription(decDescrElement.getNodeValue());
-
-				log.info("Fully parsed Decision: "
-						+ newDecisionTemplate.toString());
-
-				// import alternatives
-				// NodeList altNodeList =
-				// doc.getElementsByTagName("alternative");
-				// System.out.println("Information of all alternatives:");
-				//
-				// for (int i = 0; i < altNodeList.getLength(); i++) {
-				//
-				// Node altNode = altNodeList.item(i);
-				//
-				// if (altNode.getNodeType() == Node.ELEMENT_NODE) {
-				//
-				// Element altElement = (Element) altNode;
-				//
-				// NodeList altNameElementList =
-				// altElement.getElementsByTagName("name");
-				// Element altNameElement = (Element)
-				// altNameElementList.item(0);
-				// NodeList altNameList = altNameElement.getChildNodes();
-				// System.out.println("Alternative Name: " + ((Node)
-				// altNameList.item(0)).getNodeValue());
-				//
-				// NodeList altDescrElementList =
-				// altElement.getElementsByTagName("description");
-				// Element altDescrElement = (Element)
-				// altDescrElementList.item(0);
-				// NodeList altDescrList = altDescrElement.getChildNodes();
-				// System.out.println("Alternative Description: " + ((Node)
-				// altDescrList.item(0)).getNodeValue());
-				// }
-				// }
-
-				// int len;
-				// byte[] buffer = new byte[8192];
-				// while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
-				// resp.getOutputStream().write(buffer, 0, len);
-				// }
-
-				new HooplaServiceImpl()
-						.storeDecisionTemplate(newDecisionTemplate);
 			}
+
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.log(Level.WARNING, ex.getLocalizedMessage(), ex);
+			resp.sendError(400);
+			return;
+		}
+
+		try {
+			new HooplaServiceImpl().storeDecisionTemplate(newDecisionTemplate);
+		} catch (Exception e) {
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
+			resp.sendError(500);
+			return;
 		}
 
 		log.info("returning to referer " + req.getHeader("referer"));
-		resp.sendRedirect(req.getHeader("referer") != null && !"".equals(req.getHeader("referer")) ? req.getHeader("referer") : "localhost:8088");
+		resp.sendRedirect(req.getHeader("referer") != null
+				&& !"".equals(req.getHeader("referer")) ? req
+				.getHeader("referer") : "localhost:8088");
 	}
 
 	private void parseAlternatives(NodeList altNodes, Decision newDecision) {
@@ -245,16 +224,6 @@ public class TemplateImportServlet extends HttpServlet {
 				if (descr.getLength() > 0) {
 					alt.setDescription(descr.item(0).getTextContent());
 				}
-
-				// NodeList indexResult =
-				// child.getElementsByTagName("indexResult");
-				// if (indexResult.getLength() > 0) {
-				// try {
-				// alt.setIndexResult(Float.valueOf(indexResult.item(0).getTextContent()));
-				// } catch (Exception ex) {
-				// ex.printStackTrace();
-				// }
-				// }
 
 				log.info("Parsed alternative: " + alt.getName() + ", "
 						+ alt.getDescription());
@@ -305,31 +274,6 @@ public class TemplateImportServlet extends HttpServlet {
 						}
 					}
 				}
-				// NodeList name = child.getElementsByTagName("goalName");
-				// if (name.getLength() > 0) {
-				// newGoal.setName(name.item(0).getTextContent());
-				// }
-				//
-				// NodeList description =
-				// child.getElementsByTagName("goalDescription");
-				// if (description.getLength() > 0) {
-				// newGoal.setDescription(description.item(0).getTextContent());
-				// }
-				//
-				// NodeList goalType = child.getElementsByTagName("goalType");
-				// if (goalType.getLength() > 0 ) {
-				// if (goalType.item(0).getTextContent().equals("POSITIVE")) {
-				// newGoal.setGoalType(GoalType.POSITIVE);
-				// } else if
-				// (goalType.item(0).getTextContent().equals("NEGATIVE")) {
-				// newGoal.setGoalType(GoalType.NEGATIVE);
-				// }
-				// }
-				//
-				// NodeList criteria = child.getElementsByTagName("criteria");
-				// if (criteria.getLength() > 0) {
-				// newGoal.setChildren(parseCriteria(criteria.item(0).getChildNodes()));
-				// }
 
 				newDecision.addGoal(newGoal);
 				log.info("Parsed gaol: " + newGoal.getName() + ", "

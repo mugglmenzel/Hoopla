@@ -13,6 +13,9 @@ com.google.gwt.xml.client.DOMException, true, false, false, false, com.google.gw
 com.google.gwt.xml.client.impl.DOMParseException, true, true, false, false, com.google.gwt.xml.client.impl.DOMParseException/3799120635, 3799120635
 com.google.web.bindery.event.shared.UmbrellaException, true, true, false, false, com.google.web.bindery.event.shared.UmbrellaException/1025846929, 1025846929
 de.eorganization.hoopla.client.services.HooplaService, false, false, false, false, _, 1611838225
+de.eorganization.hoopla.shared.model.Member, true, true, true, true, de.eorganization.hoopla.shared.model.Member/3226022509, 3226022509
+@ClientFields,de.eorganization.hoopla.shared.model.Member,email,nickname,role
+de.eorganization.hoopla.shared.model.UserRole, true, true, true, true, de.eorganization.hoopla.shared.model.UserRole/442808849, 442808849
 de.eorganization.hoopla.shared.model.ahp.configuration.Alternative, true, true, true, true, de.eorganization.hoopla.shared.model.ahp.configuration.Alternative/489564863, 489564863
 @ClientFields,de.eorganization.hoopla.shared.model.ahp.configuration.Alternative,id,name,description,decision
 [Lde.eorganization.hoopla.shared.model.ahp.configuration.Alternative;, true, true, true, true, [Lde.eorganization.hoopla.shared.model.ahp.configuration.Alternative;/3200527590, 3200527590
@@ -20,12 +23,12 @@ de.eorganization.hoopla.shared.model.ahp.configuration.Criterion, true, true, tr
 @ClientFields,de.eorganization.hoopla.shared.model.ahp.configuration.Criterion,id,name,description,metric,url,type,weight,parent,importanceAlternatives,valuesAlternatives,importanceChildren,children
 de.eorganization.hoopla.shared.model.ahp.configuration.CriterionType, true, true, true, true, de.eorganization.hoopla.shared.model.ahp.configuration.CriterionType/4178421842, 4178421842
 [Lde.eorganization.hoopla.shared.model.ahp.configuration.Criterion;, true, true, true, true, [Lde.eorganization.hoopla.shared.model.ahp.configuration.Criterion;/1961748514, 1961748514
-de.eorganization.hoopla.shared.model.ahp.configuration.Decision, true, true, true, true, de.eorganization.hoopla.shared.model.ahp.configuration.Decision/3519668184, 3519668184
-@ClientFields,de.eorganization.hoopla.shared.model.ahp.configuration.Decision,id,keyId,userId,name,description,comment,alternatives,goals,requirements,importanceGoals
-de.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate, true, true, true, true, de.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate/1140352962, 1140352962
+de.eorganization.hoopla.shared.model.ahp.configuration.Decision, true, true, true, true, de.eorganization.hoopla.shared.model.ahp.configuration.Decision/3850072547, 3850072547
+@ClientFields,de.eorganization.hoopla.shared.model.ahp.configuration.Decision,id,keyId,member,name,description,comment,alternatives,goals,requirements,importanceGoals
+de.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate, true, true, true, true, de.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate/547719976, 547719976
 @ClientFields,de.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate,templateName
-[Lde.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate;, true, true, false, false, [Lde.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate;/1423105981, 1423105981
-[Lde.eorganization.hoopla.shared.model.ahp.configuration.Decision;, true, true, false, false, [Lde.eorganization.hoopla.shared.model.ahp.configuration.Decision;/4193478687, 4193478687
+[Lde.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate;, true, true, false, false, [Lde.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate;/278393024, 278393024
+[Lde.eorganization.hoopla.shared.model.ahp.configuration.Decision;, true, true, false, false, [Lde.eorganization.hoopla.shared.model.ahp.configuration.Decision;/3694496367, 3694496367
 de.eorganization.hoopla.shared.model.ahp.configuration.Goal, true, true, true, true, de.eorganization.hoopla.shared.model.ahp.configuration.Goal/2570058869, 2570058869
 @ClientFields,de.eorganization.hoopla.shared.model.ahp.configuration.Goal,decision,goalType
 de.eorganization.hoopla.shared.model.ahp.configuration.GoalType, true, true, true, true, de.eorganization.hoopla.shared.model.ahp.configuration.GoalType/4223415939, 4223415939

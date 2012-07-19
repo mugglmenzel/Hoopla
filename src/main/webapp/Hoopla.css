@@ -1,7 +1,8 @@
-@CHARSET "ISO-8859-1";  /** Add css rules here for your application. */
+@CHARSET "ISO-8859-1";
+
 body {
 	background-color: #ffffff;
-	background-image: url(/bg.png);
+	background-image: url(/bg_gray.png);
 	background-repeat: repeat-y;
 }
 

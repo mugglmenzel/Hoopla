@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datastore-indexes autoGenerate="true">
+
+	<datastore-index kind="Criterion" ancestor="true"
+		source="manual">
+		<property name="children_INTEGER_IDX" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="AlternativeImportance" ancestor="true"
+		source="manual">
+		<property name="importanceAlternatives_INTEGER_IDX"
+			direction="asc" />
+	</datastore-index>
+	<datastore-index kind="CriterionImportance" ancestor="true"
+		source="manual">
+		<property name="importanceChildren_INTEGER_IDX" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="AlternativeValue" ancestor="true"
+		source="manual">
+		<property name="valuesAlternatives_INTEGER_IDX" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="GoalImportance" ancestor="true"
+		source="manual">
+		<property name="importanceGoals_INTEGER_IDX" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="Requirement" ancestor="true"
+		source="manual">
+		<property name="requirements_INTEGER_IDX" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="Alternative" ancestor="true"
+		source="manual">
+		<property name="alternatives_INTEGER_IDX" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="Goal" ancestor="true" source="manual">
+		<property name="goals_INTEGER_IDX" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="Member" ancestor="true" source="manual">
+		<property name="email" direction="asc" />
+	</datastore-index>
+</datastore-indexes>

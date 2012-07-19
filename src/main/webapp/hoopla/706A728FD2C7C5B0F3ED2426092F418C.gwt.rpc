@@ -2,7 +2,10 @@ com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException, true, true, t
 com.google.gwt.user.client.rpc.RpcTokenException, true, true, false, false, com.google.gwt.user.client.rpc.RpcTokenException/2345075298, 2345075298
 com.google.gwt.user.client.rpc.XsrfToken, false, false, true, true, com.google.gwt.user.client.rpc.XsrfToken/4254043109, 4254043109
 de.eorganization.hoopla.client.services.LoginService, false, false, false, false, _, 1263213052
-de.eorganization.hoopla.shared.LoginInfo, true, true, false, false, de.eorganization.hoopla.shared.LoginInfo/2818049523, 2818049523
+de.eorganization.hoopla.shared.model.LoginInfo, true, true, false, false, de.eorganization.hoopla.shared.model.LoginInfo/12061290, 12061290
+de.eorganization.hoopla.shared.model.Member, true, true, true, true, de.eorganization.hoopla.shared.model.Member/3226022509, 3226022509
+@ClientFields,de.eorganization.hoopla.shared.model.Member,email,nickname,role
+de.eorganization.hoopla.shared.model.UserRole, true, true, true, true, de.eorganization.hoopla.shared.model.UserRole/442808849, 442808849
 java.lang.Exception, true, false, true, false, java.lang.Exception/1920171873, 1920171873
 java.lang.RuntimeException, true, false, true, false, java.lang.RuntimeException/515124647, 515124647
 java.lang.String, true, true, true, true, java.lang.String/2004016611, 2004016611

@@ -12,7 +12,7 @@ public class DecisionsDataSource {
 	
 	public ListGridRecord[] createListGridRecords() {
 		
-		Hoopla.hooplaService.getDecisions(new AsyncCallback<List<Decision>>() {
+		Hoopla.hooplaService.getDecisions(Hoopla.user.getMember().getEmail(), new AsyncCallback<List<Decision>>() {
 			
 			public void onSuccess(List<Decision> result) {
 				

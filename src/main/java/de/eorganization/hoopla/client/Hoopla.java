@@ -5,12 +5,13 @@ import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.BkgndRepeat;
+import com.smartgwt.client.types.VerticalAlignment;
+import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.Layout;
@@ -25,18 +26,20 @@ import de.eorganization.hoopla.client.services.HooplaService;
 import de.eorganization.hoopla.client.services.HooplaServiceAsync;
 import de.eorganization.hoopla.client.services.LoginService;
 import de.eorganization.hoopla.client.services.LoginServiceAsync;
+import de.eorganization.hoopla.client.smartView.AdminView;
 import de.eorganization.hoopla.client.smartView.AlternativesEvaluationView;
 import de.eorganization.hoopla.client.smartView.AlternativesView;
 import de.eorganization.hoopla.client.smartView.CriteriaEvaluationView;
 import de.eorganization.hoopla.client.smartView.GoalsAndCriteriaView;
-import de.eorganization.hoopla.client.smartView.GreetingView;
 import de.eorganization.hoopla.client.smartView.IView;
 import de.eorganization.hoopla.client.smartView.NewDecisionView;
 import de.eorganization.hoopla.client.smartView.NoLoginGreetingView;
 import de.eorganization.hoopla.client.smartView.RequirementsView;
 import de.eorganization.hoopla.client.smartView.ResultView;
+import de.eorganization.hoopla.client.smartView.WelcomeView;
 import de.eorganization.hoopla.client.subjects.DecisionUpdatedSubject;
-import de.eorganization.hoopla.shared.LoginInfo;
+import de.eorganization.hoopla.shared.model.LoginInfo;
+import de.eorganization.hoopla.shared.model.UserRole;
 import de.eorganization.hoopla.shared.model.ahp.configuration.Decision;
 
 /**
@@ -83,12 +86,13 @@ public class Hoopla implements EntryPoint {
 
 	public static List<IView> views = new ArrayList<IView>();
 
-	public static HooplaServiceAsync hooplaService = GWT.create(HooplaService.class);
+	public static HooplaServiceAsync hooplaService = GWT
+			.create(HooplaService.class);
 
 	public static LoginServiceAsync loginService = GWT
 			.create(LoginService.class);
 
-	public static LoginInfo user = new LoginInfo();
+	public static de.eorganization.hoopla.shared.model.LoginInfo user = new LoginInfo();
 
 	public static Decision decision = new Decision();
 
@@ -102,7 +106,7 @@ public class Hoopla implements EntryPoint {
 
 					public void onSuccess(LoginInfo result) {
 						user = result;
-						decision.setUserId(user.getEmailAddress());
+
 						createMasterLayout();
 					}
 				});
@@ -123,27 +127,28 @@ public class Hoopla implements EntryPoint {
 		top.setBackgroundImage("/clouds.png");
 		top.setBackgroundPosition("bottom");
 		top.setBackgroundRepeat(BkgndRepeat.REPEAT_X);
-		top.setAlign(Alignment.RIGHT);
+		top.setAlign(Alignment.LEFT);
 
-//		Img aotearoa = new Img("/Aotearoa-Logo.png", 350, 175);
-//		aotearoa.setLayoutAlign(VerticalAlignment.CENTER);
-//
-//		Img fzi = new Img("/FZI.png", 75, 132);
-//		fzi.setLayoutAlign(VerticalAlignment.CENTER);
-//
-//		Label block = new Label();
-//		block.setWidth(1000 - aotearoa.getWidth() - fzi.getWidth() - 30);
-//
-//		top.addMember(aotearoa);
-//		top.addMember(block);
-//		top.addMember(fzi);
+		Img hooplaLogo = new Img("/hoopla_logo.png", 353, 150);
+		hooplaLogo.setLayoutAlign(VerticalAlignment.TOP);
+		HLayout login = new HLayout();
+		login.setAlign(Alignment.RIGHT);
+
+		top.addMember(hooplaLogo);
+		top.addMember(login);
 
 		if (!user.isLoggedIn()) {
-			top.addMember(new Anchor("login", user.getLoginUrl()));
+			login.addMember(new Anchor(new SafeHtmlBuilder()
+					.appendHtmlConstant(
+							"<span style=\"font-size: 10pt\">login</span>")
+					.toSafeHtml(), user.getLoginUrl()));
 		} else {
-			top.addMember(new Label(user.getNickname()));
-			top.addMember(new Anchor("logout", user.getLogoutUrl()));
-
+			login.addMember(new Label("<span style=\"font-size: 10pt\">"
+					+ user.getMember().getNickname() + " </span> "));
+			login.addMember(new Anchor(new SafeHtmlBuilder()
+					.appendHtmlConstant(
+							"<span style=\"font-size: 10pt\">logout</span>")
+					.toSafeHtml(), user.getLogoutUrl()));
 		}
 
 		tabs.setWidth100();
@@ -167,15 +172,23 @@ public class Hoopla implements EntryPoint {
 		} else {
 
 			Tab greeting = new Tab("Welcome to the Hoopla");
-			final GreetingView greetingsView = new GreetingView();
-			greeting.setPane(greetingsView.getLayout());
+			/*
+			 * final GreetingView greetingsView = new GreetingView();
+			 * greeting.setPane(greetingsView.getLayout());
+			 * greeting.addTabSelectedHandler(new TabSelectedHandler() { public
+			 * void onTabSelected(TabSelectedEvent event) {
+			 * greetingsView.refresh(); } }); tabs.addTab(greeting);
+			 * views.add(greetingsView);
+			 */
+			final WelcomeView welcomeView = new WelcomeView();
+			greeting.setPane(welcomeView.getLayout());
 			greeting.addTabSelectedHandler(new TabSelectedHandler() {
 				public void onTabSelected(TabSelectedEvent event) {
-					greetingsView.refresh();
+					welcomeView.refresh();
 				}
 			});
 			tabs.addTab(greeting);
-			views.add(greetingsView);
+			views.add(welcomeView);
 
 			Tab newDecision = new Tab("1. New Cloud Decision");
 			final NewDecisionView decisionView = new NewDecisionView();
@@ -260,21 +273,25 @@ public class Hoopla implements EntryPoint {
 			tabs.addTab(results);
 			views.add(resultsView);
 		}
+		if (user.getMember() != null
+				&& UserRole.ADMIN.equals(user.getMember().getRole())) {
+			Tab admin = new Tab("admin");
+			final AdminView adminView = new AdminView();
+			admin.setPane(adminView.getLayout());
+			admin.addTabSelectedHandler(new TabSelectedHandler() {
+				@Override
+				public void onTabSelected(TabSelectedEvent event) {
+					adminView.refresh();
+				}
+			});
+			tabs.addTab(admin);
+			views.add(adminView);
+		}
 
 		masterLayout.addMember(top);
 		masterLayout.addMember(tabs);
 
-		if ("standalone".equals(Window.Location.getParameter("mode"))) {
-			RootPanel.get().getElement().getElementsByTagName("div").getItem(0)
-					.removeFromParent();
-			masterLayout.setWidth100();
-			masterLayout.setHeight100();
-			masterLayout.draw();
-		} else {
-			masterLayout.setWidth(970);
-			masterLayout.setHeight(1000);
-			RootPanel.get("main").add(masterLayout);
-		}
+		masterLayout.draw();
 
 	}
 

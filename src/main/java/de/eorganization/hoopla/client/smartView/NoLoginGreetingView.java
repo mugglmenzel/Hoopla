@@ -8,8 +8,8 @@ public class NoLoginGreetingView extends AbstractView {
 	public NoLoginGreetingView() {
 		super(false, false, false);
 		getHeading().setContents("Welcome to the Hoopla");
-		getInstructions().setContents("Please log in to use Aotearoa!");
-		getPostit().setContents("Please log in to use Aotearoa!");
+		getInstructions().setContents("Please log in to use Hoopla!");
+		getPostit().setContents("Please log in to use Hoopla!");
 
 	}
 

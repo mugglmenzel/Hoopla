@@ -64,7 +64,7 @@ public class DecisionTemplate extends Decision implements Serializable {
 		Decision decision = dec.clone();
 		setAlternatives(decision.getAlternatives());
 		setGoals(decision.getGoals());
-		setUserId(decision.getUserId());
+		setMember(decision.getMember());
 		setName(decision.getName());
 		setDescription(decision.getDescription());
 		setTemplateName("New Template");

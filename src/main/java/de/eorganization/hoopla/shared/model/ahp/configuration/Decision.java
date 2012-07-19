@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.jdo.annotations.Element;
+import javax.jdo.annotations.Embedded;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.Inheritance;
@@ -13,6 +15,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import de.eorganization.hoopla.shared.model.Member;
 import de.eorganization.hoopla.shared.model.ahp.configuration.requirement.Requirement;
 import de.eorganization.hoopla.shared.model.ahp.values.GoalImportance;
 
@@ -52,7 +55,8 @@ import de.eorganization.hoopla.shared.model.ahp.values.GoalImportance;
  *         SVN URL: $HeadURL:
  *         https://aotearoadecisions.googlecode.com/svn/trunk/
  *         src/main/java/de/fzi
- *         /aotearoa/de.eorganization.hoopla.shared.model/model/ahp/configuration/Decision.java $
+ *         /aotearoa/de.eorganization.hoopla.shared.model/model
+ *         /ahp/configuration/Decision.java $
  * 
  */
 
@@ -77,7 +81,8 @@ public class Decision implements Serializable, Cloneable {
 	private Long keyId;
 
 	@Persistent
-	protected String userId;
+	@Embedded
+	protected Member member;
 
 	@Persistent
 	protected String name;
@@ -85,7 +90,6 @@ public class Decision implements Serializable, Cloneable {
 	@Persistent
 	protected String description;
 
-	// add Wang
 	@Persistent
 	protected String comment;
 
@@ -243,13 +247,6 @@ public class Decision implements Serializable, Cloneable {
 		return name;
 	}
 
-	/**
-	 * @return the userId
-	 */
-	public String getUserId() {
-		return userId;
-	}
-
 	public void setAlternatives(List<Alternative> alternatives) {
 		this.alternatives = alternatives;
 	}
@@ -270,14 +267,6 @@ public class Decision implements Serializable, Cloneable {
 	public void setName(String name) {
 		this.name = name;
 	};
-
-	/**
-	 * @param userId
-	 *            the userId to set
-	 */
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
 
 	/**
 	 * @param id
@@ -320,6 +309,21 @@ public class Decision implements Serializable, Cloneable {
 		return keyId;
 	}
 
+	/**
+	 * @return the member
+	 */
+	public Member getMember() {
+		return member;
+	}
+
+	/**
+	 * @param member
+	 *            the member to set
+	 */
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -328,7 +332,7 @@ public class Decision implements Serializable, Cloneable {
 	public Decision clone() {
 		Decision dec = new Decision(getName());
 		dec.setDescription(getDescription());
-		dec.setUserId(getUserId());
+		dec.setMember(getMember());
 		// add Wang
 		dec.setComment(getComment());
 
@@ -389,7 +393,7 @@ public class Decision implements Serializable, Cloneable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		result = prime * result + ((member == null) ? 0 : member.hashCode());
 		return result;
 	}
 
@@ -412,10 +416,10 @@ public class Decision implements Serializable, Cloneable {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (userId == null) {
-			if (other.userId != null)
+		if (member == null) {
+			if (other.member != null)
 				return false;
-		} else if (!userId.equals(other.userId))
+		} else if (!member.equals(other.member))
 			return false;
 		return true;
 	}
@@ -428,7 +432,8 @@ public class Decision implements Serializable, Cloneable {
 	}
 
 	/**
-	 * @param requirements the requirements to set
+	 * @param requirements
+	 *            the requirements to set
 	 */
 	public void setRequirements(List<Requirement<?>> requirements) {
 		this.requirements = requirements;

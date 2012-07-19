@@ -1,2 +1,2 @@
 serviceClass: de.eorganization.hoopla.client.services.HooplaService
-path: D160D31E7C8D06FEA336BEDEBC722B52.gwt.rpc
+path: 69B5015FEDFDD23CCB82832E42FEB289.gwt.rpc

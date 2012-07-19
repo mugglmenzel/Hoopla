@@ -79,26 +79,20 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 	 */
 	public HooplaServiceImpl() {
 		super();
-		// this.pm = PersistenceManagerFactoryHelper.getPM();
 	}
 
 	public Decision storeDecision(Decision newDecision) {
 		Decision result = null;
 		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
-		// Transaction tx = pm.currentTransaction();
 		try {
 
-			log.info("storing " + newDecision);
-			// tx.begin();
+			log.fine("storing " + newDecision);
 			result = pm.makePersistent(newDecision);
-			// tx.commit();
 
 			result = detachDecision(result, pm);
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			log.log(Level.WARNING, e.getLocalizedMessage(), e);
-			// tx.rollback();
 		} finally {
 			pm.close();
 		}
@@ -109,18 +103,14 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 	public DecisionTemplate storeDecisionTemplate(DecisionTemplate newTemplate) {
 		DecisionTemplate result = null;
 		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
-		// Transaction tx = pm.currentTransaction();
 		try {
 
-			// tx.begin();
 			result = pm.makePersistent(newTemplate);
-			// tx.commit();
 
 			result = detachDecisionTemplate(result, pm);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			// tx.rollback();
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
 		} finally {
 			pm.close();
 		}
@@ -129,24 +119,20 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Decision> getDecisions() {
+	public List<Decision> getDecisions(String userId) {
 		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
-		// String query = "select from " + Decision.class.getName() +
-		// " where userId == " + AotearoaSmart.user.getEmailAddress();
-		// temporaer folgende Abfrage, da sonst templates nicht geladne werden.
-		// String query = "select from " + Decision.class.getName();
-
 		List<Decision> list = new ArrayList<Decision>();
 		try {
 
 			Collection<Decision> results = (Collection<Decision>) pm.newQuery(
-					Decision.class).execute();
+					Decision.class, "member.email == '" + userId + "'")
+					.execute();
 			if (results.size() > 0)
 				for (Decision dec : results)
 					list.add(detachDecision(dec, pm));
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
 		} finally {
 			pm.close();
 		}
@@ -158,11 +144,6 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 	@SuppressWarnings("unchecked")
 	public List<DecisionTemplate> getDecisionTemplates() {
 		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
-		// String query = "select from " + DecisionTemplate.class.getName() +
-		// " where userId == " + AotearoaSmart.user.getEmailAddress();
-		// String query = "select from " + DecisionTemplate.class.getName();
-		// List<DecisionTemplate> list = new ArrayList<DecisionTemplate>();
-		// list.addAll((List<DecisionTemplate>) pm.newQuery(query).execute());
 		List<DecisionTemplate> list = new ArrayList<DecisionTemplate>();
 		try {
 
@@ -172,7 +153,7 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 				for (DecisionTemplate dec : results)
 					list.add(detachDecisionTemplate(dec, pm));
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
 		} finally {
 			pm.close();
 		}
@@ -188,12 +169,10 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 			Decision detached = null;
 			try {
 
-				// pm.retrieve(dec);
-
 				detached = detachDecision(dec, pm);
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.log(Level.WARNING, e.getLocalizedMessage(), e);
 			} finally {
 				pm.close();
 			}
@@ -218,7 +197,7 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 			touchDecision(detached);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		return detached;
 	}
@@ -239,7 +218,7 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 			touchDecision(detached);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
 		}
 		return detached;
 	}
@@ -252,12 +231,10 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 
 			try {
 
-				// pm.retrieve(dec);
-
 				detached = detachDecisionTemplate(dec, pm);
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.log(Level.WARNING, e.getLocalizedMessage(), e);
 			} finally {
 				pm.close();
 			}
@@ -310,17 +287,12 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 
 			decision = pm.getObjectById(Decision.class,
 					KeyFactory.createKey(Decision.class.getSimpleName(), id));
-			// decision = pm.getObjectById(Decision.class, id);
-			// decision = (Decision)
-			// pm.getObjectById(KeyFactory.stringToKey(id));
-
-			// detach decision object
 			detached = pm.detachCopy(decision);
 
 			enrichDecision(detached);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
 		} finally {
 			pm.close();
 		}
@@ -335,17 +307,12 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 
 			decision = pm.getObjectById(DecisionTemplate.class, KeyFactory
 					.createKey(DecisionTemplate.class.getSimpleName(), id));
-			// decision = pm.getObjectById(Decision.class, id);
-			// decision = (Decision)
-			// pm.getObjectById(KeyFactory.stringToKey(id));
-
-			// detach decision object
 			detached = pm.detachCopy(decision);
 
 			enrichDecision(detached);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
 		} finally {
 			pm.close();
 		}
@@ -360,7 +327,7 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 					decision);
 			return ahp.evaluate(eval, precision);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
 			throw e;
 		}
 	}

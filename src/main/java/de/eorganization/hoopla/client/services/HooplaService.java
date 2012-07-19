@@ -21,7 +21,7 @@ public interface HooplaService extends RemoteService {
 	
 	public DecisionTemplate storeDecisionTemplate(DecisionTemplate newTemplate);
 	
-	public List<Decision> getDecisions();
+	public List<Decision> getDecisions(String userId);
 	
 	public List<DecisionTemplate> getDecisionTemplates();
 	

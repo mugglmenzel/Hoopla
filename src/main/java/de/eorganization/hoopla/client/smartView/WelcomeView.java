@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.SelectionStyle;
 import com.smartgwt.client.types.VerticalAlignment;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
@@ -17,16 +18,18 @@ import com.smartgwt.client.widgets.layout.VLayout;
 
 import de.eorganization.hoopla.client.Hoopla;
 import de.eorganization.hoopla.shared.model.ahp.configuration.Decision;
+import de.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate;
 
-public class GreetingView extends AbstractView {
+public class WelcomeView extends AbstractView {
 
 	private final static ListGrid decisionsList = new ListGrid();
 
-	public GreetingView() {
+	public WelcomeView() {
 		super(false, false, false);
-		getHeading().setContents("Welcome to the Hoopla");
-		getInstructions().setContents(
-				"Select an existing decision or a template.");
+		getHeading().setContents("Welcome to Hoopla");
+		getInstructions()
+				.setContents(
+						"Start a new Cloud decision or continue one of your existing Cloud decisions.");
 		getPostit()
 				.setContents(
 						"The Hoopla offers you several templates to do an  Cloud Computing Provider evaluation. Select a decision, a template  or  create your own decision by clicking 'New Cloud Decision'  ...");
@@ -41,18 +44,25 @@ public class GreetingView extends AbstractView {
 		ListGridField DecisionNameField = new ListGridField("name", "Name");
 		decisionsList.setFields(DecisionNameField);
 		decisionsList.setCanResizeFields(true);
+
+		Label blankDecisionLabel = new Label(
+				"<span style=\"font-size: 10pt; font-style: bold\">Start from the cratch and build your own Cloud Decision.</span>");
+		blankDecisionLabel.setAutoHeight();
+		blankDecisionLabel.setWrap(false);
+
 		// Buttons
-		IButton newDecisionButton = new IButton("New Decision");
-		// newDecision.setAutoFit(true);
-		// newDecision.setLeft(30);
-		// newDecisionButton.setWidth(150);
-		// newDecisionButton.setHeight(50);
-		newDecisionButton.addClickHandler(new ClickHandler() {
+		IButton newBlankDecisionButton = new IButton(
+				"<span style=\"font-size: 12pt; font-style: bold\">New Blank Decision</span>");
+		newBlankDecisionButton.setWidth(300);
+		newBlankDecisionButton.setHeight(50);
+		newBlankDecisionButton.setWrap(false);
+		newBlankDecisionButton.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-
-				Hoopla.hooplaService.storeDecision(new Decision(),
+				Decision dec = new Decision();
+				dec.setMember(Hoopla.user.getMember());
+				Hoopla.hooplaService.storeDecision(dec,
 						new AsyncCallback<Decision>() {
 
 							@Override
@@ -71,13 +81,65 @@ public class GreetingView extends AbstractView {
 			}
 
 		});
+
+		Label cloudInfrastructureDecisionLabel = new Label(
+				"<span style=\"font-size: 10pt; font-style: bold\">Is Cloud the right platform for you? Make a Infrastructure Decision.</span>");
+		cloudInfrastructureDecisionLabel.setAutoHeight();
+		cloudInfrastructureDecisionLabel.setWrap(false);
+
+		// Buttons
+		IButton newInfraDecisionButton = new IButton(
+				"<span style=\"font-size: 12pt; font-style: bold\">New Cloud Infrastructure Decision</span>");
+		newInfraDecisionButton.setWidth(300);
+		newInfraDecisionButton.setHeight(50);
+		newInfraDecisionButton.setWrap(false);
+		newInfraDecisionButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				Hoopla.hooplaService.getDecisionTemplate(1L,
+						new AsyncCallback<DecisionTemplate>() {
+
+							@Override
+							public void onFailure(Throwable caught) {
+								// TODO Auto-generated method stub
+
+							}
+
+							@Override
+							public void onSuccess(DecisionTemplate result) {
+								Decision dec = result.getDecision();
+								dec.setMember(Hoopla.user.getMember());
+								Hoopla.hooplaService.storeDecision(dec,
+										new AsyncCallback<Decision>() {
+
+											@Override
+											public void onFailure(
+													Throwable caught) {
+
+											}
+
+											@Override
+											public void onSuccess(
+													Decision result) {
+												Hoopla.updateDecision(result);
+												Hoopla.tabs.selectTab(Hoopla.tabs
+														.getSelectedTabNumber() + 1);
+											}
+										});
+							}
+						});
+
+			}
+
+		});
 		IButton selectDecisionButton = new IButton("Select Decision");
 		selectDecisionButton.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				Hoopla.updateDecision((Decision) decisionsList
-						.getSelectedRecord().getAttributeAsObject("decision"));
+				goNext();
 			}
 		});
 
@@ -92,7 +154,10 @@ public class GreetingView extends AbstractView {
 
 		// Content Layout
 		VLayout contents = new VLayout();
-		contents.addMember(newDecisionButton);
+		contents.addMember(cloudInfrastructureDecisionLabel);
+		contents.addMember(newInfraDecisionButton);
+		contents.addMember(blankDecisionLabel);
+		contents.addMember(newBlankDecisionButton);
 		contents.addMember(decisionLabel);
 		contents.addMember(selectDecisionButton);
 		contents.addMember(decisionsList);
@@ -144,23 +209,12 @@ public class GreetingView extends AbstractView {
 
 		if (decisionsList.getSelectedRecord() != null
 				&& decisionsList.getSelectedRecord().getAttributeAsObject(
-						"decision") != null)
+						"decision") != null) {
 			Hoopla.updateDecision((Decision) decisionsList.getSelectedRecord()
 					.getAttributeAsObject("decision"));
-		else
-			Hoopla.hooplaService.storeDecision(new Decision(),
-					new AsyncCallback<Decision>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-
-						}
-
-						@Override
-						public void onSuccess(Decision result) {
-							Hoopla.updateDecision(result);
-						}
-					});
+			nextTab(-1);
+		} else
+			SC.warn("Please select a decision first!");
 
 	}
 
