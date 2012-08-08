@@ -81,3 +81,7 @@ h1 {
 	font-weight: bold;
 	color: black;
 }
+
+.link {
+	cursor: pointer;
+}

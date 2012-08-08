@@ -10,8 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.BkgndRepeat;
-import com.smartgwt.client.types.VerticalAlignment;
-import com.smartgwt.client.widgets.Img;
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.Layout;
@@ -129,10 +128,20 @@ public class Hoopla implements EntryPoint {
 		top.setBackgroundRepeat(BkgndRepeat.REPEAT_X);
 		top.setAlign(Alignment.LEFT);
 
-		Img hooplaLogo = new Img("/hoopla_logo.png", 353, 150);
-		hooplaLogo.setLayoutAlign(VerticalAlignment.TOP);
+		Anchor hooplaLogo = new Anchor(new SafeHtmlBuilder().appendHtmlConstant(Canvas.imgHTML("/hoopla_logo.png", 353, 150)).toSafeHtml(), GWT.getHostPageBaseURL(), "_top");
+		//hooplaLogo.setLayoutAlign(VerticalAlignment.TOP);
+		/*hooplaLogo.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.Location.replace(GWT.getHostPageBaseURL());
+			}
+		});*/
+		//hooplaLogo.setHoverStyle("link");
+		//hooplaLogo.addStyleName("link");
 		HLayout login = new HLayout();
 		login.setAlign(Alignment.RIGHT);
+		login.setMembersMargin(15);
 
 		top.addMember(hooplaLogo);
 		top.addMember(login);
@@ -140,14 +149,14 @@ public class Hoopla implements EntryPoint {
 		if (!user.isLoggedIn()) {
 			login.addMember(new Anchor(new SafeHtmlBuilder()
 					.appendHtmlConstant(
-							"<span style=\"font-size: 10pt\">login</span>")
+							"<span style=\"font-size: 20pt\">login</span>")
 					.toSafeHtml(), user.getLoginUrl()));
 		} else {
-			login.addMember(new Label("<span style=\"font-size: 10pt\">"
+			login.addMember(new Label("<span style=\"font-size: 20pt\">"
 					+ user.getMember().getNickname() + " </span> "));
 			login.addMember(new Anchor(new SafeHtmlBuilder()
 					.appendHtmlConstant(
-							"<span style=\"font-size: 10pt\">logout</span>")
+							"<span style=\"font-size: 20pt\">logout</span>")
 					.toSafeHtml(), user.getLogoutUrl()));
 		}
 

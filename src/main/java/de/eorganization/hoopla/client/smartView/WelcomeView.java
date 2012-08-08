@@ -53,7 +53,7 @@ public class WelcomeView extends AbstractView {
 		// Buttons
 		IButton newBlankDecisionButton = new IButton(
 				"<span style=\"font-size: 12pt; font-style: bold\">New Blank Decision</span>");
-		newBlankDecisionButton.setWidth(300);
+		newBlankDecisionButton.setWidth(400);
 		newBlankDecisionButton.setHeight(50);
 		newBlankDecisionButton.setWrap(false);
 		newBlankDecisionButton.addClickHandler(new ClickHandler() {
@@ -87,10 +87,10 @@ public class WelcomeView extends AbstractView {
 		cloudInfrastructureDecisionLabel.setAutoHeight();
 		cloudInfrastructureDecisionLabel.setWrap(false);
 
-		// Buttons
+
 		IButton newInfraDecisionButton = new IButton(
 				"<span style=\"font-size: 12pt; font-style: bold\">New Cloud Infrastructure Decision</span>");
-		newInfraDecisionButton.setWidth(300);
+		newInfraDecisionButton.setWidth(400);
 		newInfraDecisionButton.setHeight(50);
 		newInfraDecisionButton.setWrap(false);
 		newInfraDecisionButton.addClickHandler(new ClickHandler() {
@@ -134,6 +134,22 @@ public class WelcomeView extends AbstractView {
 			}
 
 		});
+		
+		Label cloudComputeServiceDecisionLabel = new Label(
+				"<span style=\"font-size: 10pt; font-style: bold\">Which Cloud Compute Service is best for you? Compare Compute Services in a Decision.</span>");
+		cloudComputeServiceDecisionLabel.setAutoHeight();
+		cloudComputeServiceDecisionLabel.setWrap(false);
+
+
+		IButton newComputeServiceDecisionButton = new IButton(
+				"<span style=\"font-size: 12pt; font-style: bold\">New Cloud Compute Service Decision (soon)</span>");
+		newComputeServiceDecisionButton.setWidth(400);
+		newComputeServiceDecisionButton.setHeight(50);
+		newComputeServiceDecisionButton.setWrap(false);
+		newComputeServiceDecisionButton.setDisabled(true);
+		
+		
+		
 		IButton selectDecisionButton = new IButton("Select Decision");
 		selectDecisionButton.addClickHandler(new ClickHandler() {
 
@@ -156,6 +172,8 @@ public class WelcomeView extends AbstractView {
 		VLayout contents = new VLayout();
 		contents.addMember(cloudInfrastructureDecisionLabel);
 		contents.addMember(newInfraDecisionButton);
+		contents.addMember(cloudComputeServiceDecisionLabel);
+		contents.addMember(newComputeServiceDecisionButton);
 		contents.addMember(blankDecisionLabel);
 		contents.addMember(newBlankDecisionButton);
 		contents.addMember(decisionLabel);
@@ -212,7 +230,7 @@ public class WelcomeView extends AbstractView {
 						"decision") != null) {
 			Hoopla.updateDecision((Decision) decisionsList.getSelectedRecord()
 					.getAttributeAsObject("decision"));
-			nextTab(-1);
+			Hoopla.tabs.selectTab(Hoopla.tabs.getSelectedTabNumber() + 1);
 		} else
 			SC.warn("Please select a decision first!");
 

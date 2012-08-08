@@ -83,10 +83,11 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 
 	public Decision storeDecision(Decision newDecision) {
 		Decision result = null;
+		log.info("storing " + newDecision);
 		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
 		try {
 
-			log.fine("storing " + newDecision);
+			
 			result = pm.makePersistent(newDecision);
 
 			result = detachDecision(result, pm);
@@ -96,6 +97,7 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 		} finally {
 			pm.close();
 		}
+		log.info("returning " + newDecision);
 
 		return result;
 	}
@@ -137,6 +139,7 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 			pm.close();
 		}
 
+		log.info("returning list " + list);
 		return list;
 
 	}

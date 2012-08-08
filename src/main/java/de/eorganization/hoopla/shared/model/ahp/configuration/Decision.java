@@ -80,7 +80,7 @@ public class Decision implements Serializable, Cloneable {
 	@Extension(vendorName = "datanucleus", key = "gae.pk-id", value = "true")
 	private Long keyId;
 
-	@Persistent
+	@Persistent(dependentElement = "true", defaultFetchGroup = "true")
 	@Embedded
 	protected Member member;
 
@@ -290,8 +290,8 @@ public class Decision implements Serializable, Cloneable {
 	 */
 	@Override
 	public String toString() {
-		return getName() + ", " + getAlternatives() + ", " + getGoals() + ", "
-				+ getImportanceGoals();
+		return getName() + ", " + getMember() + ", " + getAlternatives() + ", "
+				+ getGoals() + ", " + getImportanceGoals();
 	}
 
 	/**

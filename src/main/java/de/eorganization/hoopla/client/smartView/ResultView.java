@@ -40,14 +40,16 @@ public class ResultView extends AbstractView {
 		super(true, true, false, "Go Back!", "Make New Decision!", "", -1, 0, 0);
 
 		HLayout bestLayout = new HLayout();
-		Img bestImg = new Img("/checkmark.png", 50, 50);
+		Img bestImg = new Img("/checkmark.png", 70, 70);
 
 		VLayout bestLabelLayout = new VLayout();
 		Label bestIntroLabel = new Label(
-				"<span style=\"font-size: 22pt\">The best option according to your preferences is </span>");
+				"<span style=\"font-size: 20pt\">The best option according to your preferences is </span>");
 		bestIntroLabel.setWrap(false);
+		bestIntroLabel.setAutoHeight();
 		bestLabel.setWrap(false);
 		bestLabel.setAutoWidth();
+		bestLabel.setAutoHeight();
 		bestLabelLayout.addMember(bestIntroLabel);
 		bestLabelLayout.addMember(bestLabel);
 

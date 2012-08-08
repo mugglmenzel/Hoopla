@@ -104,5 +104,18 @@ public class Member implements Serializable {
 		this.nickname = nickname;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Member [" + (email != null ? "email=" + email + ", " : "")
+				+ (nickname != null ? "nickname=" + nickname + ", " : "")
+				+ (role != null ? "role=" + role : "") + "]";
+	}
+
+	
+	
 	
 }

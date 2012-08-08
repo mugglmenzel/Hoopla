@@ -107,14 +107,18 @@ public abstract class AbstractView implements IView {
 		getLayout().setHeight100();
 
 		HLayout tabContentLayout = new HLayout();
+		tabContentLayout.setWidth100();
+		tabContentLayout.setAlign(VerticalAlignment.TOP);
 
 		VLayout contentLayout = new VLayout();
 		contentLayout.setWidth(600);
 		contentLayout.setMaxWidth(600);
+		contentLayout.setAutoHeight();
 		VLayout postitLayout = new VLayout();
 		postitLayout.setWidth(400);
 		postitLayout.setHeight100();
-		postitLayout.setSnapTo("TR");
+		postitLayout.setSnapTo("TL");
+		postitLayout.setAlign(Alignment.LEFT);
 
 		tabContentLayout.addMember(contentLayout);
 		tabContentLayout.addMember(postitLayout);
