@@ -88,7 +88,7 @@ public class CriteriaTreeGrid extends TreeGrid {
 			editImg.setShowDown(false);
 			editImg.setShowRollOver(false);
 			editImg.setLayoutAlign(Alignment.CENTER);
-			editImg.setSrc("/comment_edit.png");
+			editImg.setSrc("/images/comment_edit.png");
 			editImg.setPrompt("Edit Criterion");
 			editImg.setHeight(16);
 			editImg.setWidth(16);
@@ -108,7 +108,7 @@ public class CriteriaTreeGrid extends TreeGrid {
 			deleteImg.setShowDown(false);
 			deleteImg.setShowRollOver(false);
 			deleteImg.setLayoutAlign(Alignment.CENTER);
-			deleteImg.setSrc("/delete.png");
+			deleteImg.setSrc("/images/delete.png");
 			deleteImg.setPrompt("Delete Criterion");
 			deleteImg.setHeight(16);
 			deleteImg.setWidth(16);
@@ -136,7 +136,7 @@ public class CriteriaTreeGrid extends TreeGrid {
 			addChildImg.setShowDown(false);
 			addChildImg.setShowRollOver(false);
 			addChildImg.setLayoutAlign(Alignment.CENTER);
-			addChildImg.setSrc("/add.png");
+			addChildImg.setSrc("/images/add.png");
 			addChildImg.setPrompt("Add Child Criterion");
 			addChildImg.setHeight(16);
 			addChildImg.setWidth(16);

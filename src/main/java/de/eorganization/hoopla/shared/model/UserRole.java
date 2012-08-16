@@ -9,7 +9,7 @@ package de.eorganization.hoopla.shared.model;
  */
 public enum UserRole {
 
-	USER("user", "user@myownthemepark.appspot.com"), ADMIN("admin", "admin@myownthemepark.appspot.com");
+	USER("loginInfo", "loginInfo@myownthemepark.appspot.com"), ADMIN("admin", "admin@myownthemepark.appspot.com");
 	
 	private String roleName;
 	

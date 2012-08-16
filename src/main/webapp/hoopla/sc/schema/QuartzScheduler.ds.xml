@@ -1,14 +1,13 @@
 isc.DataSource.create({
     ID:"QuartzScheduler",
-    dbName:"ANY_DATA",
     serverConstructor:"com.isomorphic.scheduler.QuartzScheduler",
-    fields:{
-        name:{
+    fields:[
+        {
             canEdit:false,
             name:"name",
             type:"text"
         },
-        state:{
+        {
             canEdit:false,
             name:"state",
             type:"intEnum",
@@ -18,7 +17,7 @@ isc.DataSource.create({
                 "2":"Started"
             }
         }
-    },
+    ],
     operationBinding:[
         {
             operationId:"start",

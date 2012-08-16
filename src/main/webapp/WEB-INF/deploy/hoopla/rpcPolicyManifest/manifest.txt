@@ -1,4 +1,4 @@
 # Module hoopla
 # RPC service class, partial path of RPC policy file
-de.eorganization.hoopla.client.services.HooplaService, 69B5015FEDFDD23CCB82832E42FEB289.gwt.rpc
-de.eorganization.hoopla.client.services.LoginService, 706A728FD2C7C5B0F3ED2426092F418C.gwt.rpc
+de.eorganization.hoopla.client.services.LoginService, 88762A3674672534963F900800FEBD9A.gwt.rpc
+de.eorganization.hoopla.client.services.HooplaService, B3D16E32AE7B293BB2A3317DC5120430.gwt.rpc

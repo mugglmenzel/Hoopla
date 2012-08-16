@@ -1,23 +1,23 @@
 isc.DataSource.create({
     ID:"JVMClassTreeDS",
-    fields:{
-        name:{
+    fields:[
+        {
             name:"name"
         },
-        path:{
+        {
             name:"path",
             primaryKey:true
         },
-        parentID:{
+        {
             foreignKey:"JVMClassTreeDS.path",
             hidden:true,
             name:"parentID"
         },
-        isFolder:{
+        {
             name:"isFolder",
             type:"boolean"
         }
-    },
+    ],
     operationBindings:[
         {
             language:"groovy",

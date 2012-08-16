@@ -29,6 +29,32 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>OAuth2LoginServlet</servlet-name>
+		<servlet-class>de.eorganization.hoopla.server.servlets.OAuth2LoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OAuth2LoginServlet</servlet-name>
+		<url-pattern>/login/oauth</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>OAuth2CallbackServlet</servlet-name>
+		<servlet-class>de.eorganization.hoopla.server.servlets.OAuth2CallbackServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OAuth2CallbackServlet</servlet-name>
+		<url-pattern>/login/oauthcallback</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>OAuth2LogoutServlet</servlet-name>
+		<servlet-class>de.eorganization.hoopla.server.servlets.OAuth2LogoutServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OAuth2LogoutServlet</servlet-name>
+		<url-pattern>/logout/oauth</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
 		<servlet-name>templateImport</servlet-name>
 		<servlet-class>de.eorganization.hoopla.server.servlets.TemplateImportServlet</servlet-class>
 	</servlet>
@@ -50,7 +76,7 @@
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
-		<welcome-file>Hoopla.html</welcome-file>
+		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
 </web-app>

@@ -134,7 +134,7 @@ public abstract class AbstractView implements IView {
 		getNavigation().setMargin(10);
 
 		VLayout help = new VLayout();
-		help.setBackgroundImage("/post-it.png");
+		help.setBackgroundImage("/images/post-it.png");
 		help.setBackgroundRepeat(BkgndRepeat.NO_REPEAT);
 		help.setWidth(349);
 		help.setHeight(389);
@@ -145,7 +145,7 @@ public abstract class AbstractView implements IView {
 		getPostitHeader().setMaxWidth(300);
 		getPostitHeader().setStyleName("postitHeader");
 		getPostitHeader().setContents("Help");
-		getPostitHeader().setIcon("/help.png");
+		getPostitHeader().setIcon("/images/help.png");
 
 		getPostit().setValign(VerticalAlignment.TOP);
 		getPostit().setAutoHeight();
@@ -251,7 +251,7 @@ public abstract class AbstractView implements IView {
 		back.setDisabled(!showBackButton);
 		back.setAutoFit(true);
 		if (showBackButton) {
-			back.setIcon("/arrow_left.png");
+			back.setIcon("/images/arrow_left.png");
 		}
 		back.addClickHandler(new ClickHandler() {
 
@@ -267,7 +267,7 @@ public abstract class AbstractView implements IView {
 		templateAndNext.setLayoutAlign(Alignment.RIGHT);
 		templateAndNext.setDisabled(!showTemplateButton);
 		templateAndNext.setAutoFit(true);
-		templateAndNext.setIcon("/arrow_right.png");
+		templateAndNext.setIcon("/images/arrow_right.png");
 		templateAndNext.setIconOrientation("right");
 		templateAndNext.addClickHandler(new ClickHandler() {
 
@@ -284,7 +284,7 @@ public abstract class AbstractView implements IView {
 		saveAndNext.setLayoutAlign(Alignment.RIGHT);
 		saveAndNext.setDisabled(!showNextButton);
 		saveAndNext.setAutoFit(true);
-		saveAndNext.setIcon("/arrow_right.png");
+		saveAndNext.setIcon("/images/arrow_right.png");
 		saveAndNext.setIconOrientation("right");
 		saveAndNext.addClickHandler(new ClickHandler() {
 

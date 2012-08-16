@@ -1,44 +1,44 @@
 isc.DataSource.create({
     ID:"DataSourceStore",
-    fields:{
-        ID:{
+    fields:[
+        {
             name:"ID",
             primaryKey:true
         },
-        version:{
+        {
             name:"version"
         },
-        dsXML:{
+        {
             length:50000,
             name:"dsXML",
             type:"text"
         },
-        config:{
+        {
             hidden:true,
             name:"config"
         },
-        dbName:{
+        {
             hidden:true,
             name:"dbName"
         },
-        tableName:{
+        {
             hidden:true,
             name:"tableName"
         },
-        schema:{
+        {
             hidden:true,
             name:"schema"
         },
-        sql:{
+        {
             hidden:true,
             name:"sql"
         },
-        ds:{
+        {
             hidden:true,
             name:"ds",
             type:"DataSource"
         }
-    },
+    ],
     operationBindings:[
         {
             language:"groovy",

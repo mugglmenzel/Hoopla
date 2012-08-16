@@ -5,14 +5,14 @@ import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.BkgndRepeat;
-import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.Label;
-import com.smartgwt.client.widgets.layout.HLayout;
+import com.smartgwt.client.widgets.events.ClickEvent;
+import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.layout.Layout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
@@ -20,6 +20,9 @@ import com.smartgwt.client.widgets.tab.TabSet;
 import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
 import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 
+import de.eorganization.hoopla.client.gui.TopLayout;
+import de.eorganization.hoopla.client.gui.canvas.LoginWindow;
+import de.eorganization.hoopla.client.gui.canvas.RegisterWindow;
 import de.eorganization.hoopla.client.observer.events.DecisionUpdatedEvent;
 import de.eorganization.hoopla.client.services.HooplaService;
 import de.eorganization.hoopla.client.services.HooplaServiceAsync;
@@ -38,6 +41,7 @@ import de.eorganization.hoopla.client.smartView.ResultView;
 import de.eorganization.hoopla.client.smartView.WelcomeView;
 import de.eorganization.hoopla.client.subjects.DecisionUpdatedSubject;
 import de.eorganization.hoopla.shared.model.LoginInfo;
+import de.eorganization.hoopla.shared.model.Member;
 import de.eorganization.hoopla.shared.model.UserRole;
 import de.eorganization.hoopla.shared.model.ahp.configuration.Decision;
 
@@ -91,7 +95,7 @@ public class Hoopla implements EntryPoint {
 	public static LoginServiceAsync loginService = GWT
 			.create(LoginService.class);
 
-	public static de.eorganization.hoopla.shared.model.LoginInfo user = new LoginInfo();
+	public static de.eorganization.hoopla.shared.model.LoginInfo loginInfo = new LoginInfo();
 
 	public static Decision decision = new Decision();
 
@@ -104,11 +108,62 @@ public class Hoopla implements EntryPoint {
 					}
 
 					public void onSuccess(LoginInfo result) {
-						user = result;
+						DOM.setStyleAttribute(RootPanel.get("loading")
+								.getElement(), "display", "none");
 
-						createMasterLayout();
+						loginInfo = result;
+
+						if (!loginInfo.isLoggedIn()) {
+							createWelcomeLayout();
+							if (getMember() != null) {
+								new RegisterWindow(getMember()).show();
+							}
+						} else
+							createMasterLayout();
+
 					}
 				});
+
+	}
+
+	private void createWelcomeLayout() {
+		final Layout masterLayout = new VLayout();
+
+		masterLayout.addMember(new TopLayout(loginInfo));
+
+		VLayout welcomeInfo = new VLayout(10);
+		welcomeInfo.setDefaultLayoutAlign(Alignment.CENTER);
+		welcomeInfo.setAlign(VerticalAlignment.TOP);
+		welcomeInfo.setHeight100();
+		welcomeInfo.setWidth100();
+		welcomeInfo.setBackgroundColor("#ffffff");
+
+		Label welcomeLabel = new Label(
+				"<h1 style=\"font-size: 40pt\">Welcome!</h1><p style=\"font-size: 20pt\"><span style=\"font-weight: bolder;\">Hoopla</span> <span style=\"font-style: italic; font-weight: bolder;\">n.</span> is  ... .</p><p style=\"font-size: 20pt\">Feel free to play Hoopla and <a href=\"http://myownthemepark.com/prices-table/\">contact us for a premium account</a>. Simply sign in with a social loginInfo account (Facebook, Twitter, Google+).</p>");
+		welcomeLabel.setWidth(600);
+		welcomeLabel.setStyleName("welcome");
+
+		Label loginAnchor = new Label(
+				"<span style=\"font-size: 35pt; cursor: pointer; text-decoration: underline;\">Login</span>");
+		loginAnchor.setAutoFit(true);
+		loginAnchor.setWrap(false);
+		loginAnchor.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				new LoginWindow(loginInfo.getLoginUrl()).show();
+			}
+		});
+
+		welcomeInfo.addMember(welcomeLabel);
+		welcomeInfo.addMember(loginAnchor);
+
+		masterLayout.addMember(welcomeInfo);
+
+		masterLayout.setWidth100();
+		masterLayout.setHeight100();
+		masterLayout.setMaxHeight(700);
+		masterLayout.draw();
 
 	}
 
@@ -118,53 +173,11 @@ public class Hoopla implements EntryPoint {
 		masterLayout.setWidth100();
 		masterLayout.setHeight100();
 
-		// Canvas topBlock = new Canvas();
-		// topBlock.setHeight(5);
-
-		final Layout top = new HLayout();
-		top.setWidth100();
-		top.setBackgroundImage("/clouds.png");
-		top.setBackgroundPosition("bottom");
-		top.setBackgroundRepeat(BkgndRepeat.REPEAT_X);
-		top.setAlign(Alignment.LEFT);
-
-		Anchor hooplaLogo = new Anchor(new SafeHtmlBuilder().appendHtmlConstant(Canvas.imgHTML("/hoopla_logo.png", 353, 150)).toSafeHtml(), GWT.getHostPageBaseURL(), "_top");
-		//hooplaLogo.setLayoutAlign(VerticalAlignment.TOP);
-		/*hooplaLogo.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				Window.Location.replace(GWT.getHostPageBaseURL());
-			}
-		});*/
-		//hooplaLogo.setHoverStyle("link");
-		//hooplaLogo.addStyleName("link");
-		HLayout login = new HLayout();
-		login.setAlign(Alignment.RIGHT);
-		login.setMembersMargin(15);
-
-		top.addMember(hooplaLogo);
-		top.addMember(login);
-
-		if (!user.isLoggedIn()) {
-			login.addMember(new Anchor(new SafeHtmlBuilder()
-					.appendHtmlConstant(
-							"<span style=\"font-size: 20pt\">login</span>")
-					.toSafeHtml(), user.getLoginUrl()));
-		} else {
-			login.addMember(new Label("<span style=\"font-size: 20pt\">"
-					+ user.getMember().getNickname() + " </span> "));
-			login.addMember(new Anchor(new SafeHtmlBuilder()
-					.appendHtmlConstant(
-							"<span style=\"font-size: 20pt\">logout</span>")
-					.toSafeHtml(), user.getLogoutUrl()));
-		}
-
 		tabs.setWidth100();
 		tabs.setHeight100();
 		tabs.setBackgroundColor("white");
 
-		if (!user.isLoggedIn()) {
+		if (!loginInfo.isLoggedIn()) {
 			Tab greeting = new Tab("Welcome to the Hoopla");
 			final NoLoginGreetingView greetingsView = new NoLoginGreetingView();
 			greeting.setPane(greetingsView.getLayout());
@@ -282,8 +295,8 @@ public class Hoopla implements EntryPoint {
 			tabs.addTab(results);
 			views.add(resultsView);
 		}
-		if (user.getMember() != null
-				&& UserRole.ADMIN.equals(user.getMember().getRole())) {
+		if (loginInfo.getMember() != null
+				&& UserRole.ADMIN.equals(loginInfo.getMember().getRole())) {
 			Tab admin = new Tab("admin");
 			final AdminView adminView = new AdminView();
 			admin.setPane(adminView.getLayout());
@@ -297,7 +310,7 @@ public class Hoopla implements EntryPoint {
 			views.add(adminView);
 		}
 
-		masterLayout.addMember(top);
+		masterLayout.addMember(new TopLayout(loginInfo));
 		masterLayout.addMember(tabs);
 
 		masterLayout.draw();
@@ -309,5 +322,9 @@ public class Hoopla implements EntryPoint {
 		// evaluation.update(decision);
 		decisionUpdatedSubject.raiseUpdatedEvent(new DecisionUpdatedEvent(
 				decision));
+	}
+
+	private Member getMember() {
+		return loginInfo != null ? loginInfo.getMember() : null;
 	}
 }

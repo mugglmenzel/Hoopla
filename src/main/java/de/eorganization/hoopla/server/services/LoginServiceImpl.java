@@ -1,21 +1,28 @@
 package de.eorganization.hoopla.server.services;
 
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jdo.PersistenceManager;
+import javax.servlet.http.Cookie;
 
-import com.google.appengine.api.datastore.KeyFactory;
+import org.json.JSONObject;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Token;
+import org.scribe.model.Verb;
+import org.scribe.oauth.OAuthService;
+
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.eorganization.hoopla.client.services.LoginService;
-import de.eorganization.hoopla.server.jdo.PersistenceManagerFactoryHelper;
+import de.eorganization.hoopla.server.OAuth2Provider;
+import de.eorganization.hoopla.server.servlets.util.CookiesUtil;
 import de.eorganization.hoopla.shared.model.LoginInfo;
 import de.eorganization.hoopla.shared.model.Member;
-import de.eorganization.hoopla.shared.model.UserRole;
 
 /**
  * 
@@ -67,53 +74,207 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 
 	private UserService userService = UserServiceFactory.getUserService();
 
+	@Override
 	public LoginInfo login(String requestUri) {
-		User user = userService.getCurrentUser();
 		LoginInfo loginInfo = new LoginInfo();
+		loginInfo.setLoggedIn(false);
+		loginInfo.setLoginUrl(userService.createLoginURL(requestUri));
 
-		Member mbr = null;
-		if (userService.isUserLoggedIn() && user != null) {
-			mbr = getMember(user.getEmail());
-			if (mbr == null)
-				mbr = storeMember(new Member(user.getEmail(),
-						user.getNickname(),
-						userService.isUserAdmin() ? UserRole.ADMIN
-								: UserRole.USER));
-		}
-		if (mbr != null) {
-			loginInfo.setLoggedIn(true);
-			loginInfo.setMember(mbr);
-			loginInfo.setLogoutUrl(userService.createLogoutURL(requestUri));
+		Map<String, String> cookies = CookiesUtil
+				.getCookiesStringMap(getThreadLocalRequest().getCookies());
+		log.info("Got cookies " + cookies);
+		String oauthService = cookies.get("oauth.service");
+
+		log.info("Logging in with OAuth service " + oauthService);
+
+		if (oauthService != null) {
+			try {
+				String accessTokenString = cookies.get("oauth.accessToken");
+				String accessSecret = cookies.get("oauth.secret");
+				if (accessTokenString == null)
+					return loginInfo;
+
+				log.info("Retrieved access token " + accessTokenString);
+				Token accessToken = new Token(accessTokenString, accessSecret);
+				log.info("Token object " + accessToken.getToken() + ", "
+						+ accessToken.getSecret());
+
+				OAuth2Provider provider = OAuth2Provider.valueOf(oauthService);
+				OAuthService service = provider.getOAuthService();
+
+				Cookie serviceTokenCookie = new Cookie("oauth.service",
+						provider.toString());
+				serviceTokenCookie.setMaxAge(14 * 24 * 60 * 60);
+				serviceTokenCookie.setPath("/");
+				getThreadLocalResponse().addCookie(serviceTokenCookie);
+				Cookie accessTokenCookie = new Cookie("oauth.accessToken",
+						accessTokenString);
+				accessTokenCookie.setMaxAge(14 * 24 * 60 * 60);
+				accessTokenCookie.setPath("/");
+				getThreadLocalResponse().addCookie(accessTokenCookie);
+				Cookie accessSecretCookie = new Cookie("oauth.secret",
+						accessSecret);
+				accessSecretCookie.setMaxAge(14 * 24 * 60 * 60);
+				accessSecretCookie.setPath("/");
+				getThreadLocalResponse().addCookie(accessSecretCookie);
+
+				if (OAuth2Provider.GOOGLE.equals(provider)) {
+					OAuthRequest req = new OAuthRequest(Verb.GET,
+							"https://www.googleapis.com/oauth2/v1/userinfo");
+					service.signRequest(accessToken, req);
+					Response response = req.send();
+					log.info("Requested user info from google: "
+							+ response.getBody());
+
+					JSONObject googleUserInfo = new JSONObject(
+							response.getBody());
+					log.info("got user info: "
+							+ googleUserInfo.getString("given_name") + ", "
+							+ googleUserInfo.getString("family_name"));
+
+					Member tempMember = new HooplaServiceImpl()
+							.findMemberBySocialId(googleUserInfo
+									.getString("id"));
+
+					if (tempMember == null) {
+						tempMember = new Member();
+
+						tempMember.setSocialId(googleUserInfo.getString("id"));
+						tempMember.setFirstname(googleUserInfo
+								.getString("given_name"));
+						tempMember.setLastname(googleUserInfo
+								.getString("family_name"));
+						tempMember
+								.setNickname(googleUserInfo.getString("name"));
+						tempMember.setProfilePic(googleUserInfo
+								.getString("picture"));
+
+						req = new OAuthRequest(Verb.GET,
+								"https://www.googleapis.com/plus/v1/people/me");
+						service.signRequest(accessToken, req);
+						response = req.send();
+						log.info("Requested more user info from google: "
+								+ response.getBody());
+
+						JSONObject googleUserInfo2 = new JSONObject(
+								response.getBody());
+						log.info("got user info: "
+								+ googleUserInfo2.getString("nickname") + ", "
+								+ googleUserInfo2.getString("displayName"));
+						if (googleUserInfo2 != null
+								&& googleUserInfo2.getJSONArray("emails") != null)
+							for (int i = 0; i < googleUserInfo2.getJSONArray(
+									"emails").length(); i++) {
+								JSONObject emailInfo = googleUserInfo2
+										.getJSONArray("emails")
+										.optJSONObject(i);
+								if (emailInfo != null
+										&& emailInfo.getBoolean("primary")) {
+									tempMember.setEmail(emailInfo
+											.getString("value"));
+									tempMember = new HooplaServiceImpl()
+											.registerMember(tempMember);
+									loginInfo.setLoggedIn(true);
+									break;
+								}
+							}
+					} else
+						loginInfo.setLoggedIn(true);
+
+					loginInfo.setMember(tempMember);
+
+				} else if (OAuth2Provider.TWITTER.equals(provider)) {
+					OAuthRequest req = new OAuthRequest(Verb.GET,
+							"https://api.twitter.com/1/account/verify_credentials.json");
+					service.signRequest(accessToken, req);
+					log.info("Requesting from twitter " + req.getCompleteUrl());
+					Response response = req.send();
+					log.info("Requested user info from twitter: "
+							+ response.getBody());
+					JSONObject twitterUserInfo = new JSONObject(
+							response.getBody());
+					log.info("got user info: "
+							+ twitterUserInfo.getString("name") + ", "
+							+ twitterUserInfo.getString("screen_name"));
+
+					Member tempMember = new HooplaServiceImpl()
+							.findMemberBySocialId(new Integer(twitterUserInfo
+									.getInt("id")).toString());
+					if (tempMember == null) {
+						tempMember = new Member();
+						tempMember.setSocialId(new Integer(twitterUserInfo
+								.getInt("id")).toString());
+						tempMember.setFirstname(twitterUserInfo.getString(
+								"name").split(" ")[0]);
+						tempMember.setLastname(twitterUserInfo
+								.getString("name").split(" ", 2)[1]);
+						tempMember.setNickname(twitterUserInfo
+								.getString("screen_name"));
+						tempMember.setProfilePic(twitterUserInfo
+								.getString("profile_image_url"));
+					} else
+						loginInfo.setLoggedIn(true);
+					loginInfo.setMember(tempMember);
+
+				} else if (OAuth2Provider.FACEBOOK.equals(provider)) {
+					OAuthRequest req = new OAuthRequest(Verb.GET,
+							"https://graph.facebook.com/me");
+					service.signRequest(accessToken, req);
+					log.info("Requesting from facebook " + req.getCompleteUrl());
+					Response response = req.send();
+					log.info("Requested user info from facebook: "
+							+ response.getBody());
+					JSONObject facebookUserInfo = new JSONObject(
+							response.getBody());
+					log.info("got user info: "
+							+ facebookUserInfo.getString("name") + ", "
+							+ facebookUserInfo.getString("username"));
+
+					Member tempMember = new HooplaServiceImpl()
+							.findMemberBySocialId(facebookUserInfo
+									.getString("id"));
+					if (tempMember == null) {
+						tempMember = new Member();
+						tempMember.setSocialId(new Integer(facebookUserInfo
+								.getString("id")).toString());
+						tempMember.setFirstname(facebookUserInfo
+								.getString("first_name"));
+						tempMember.setLastname(facebookUserInfo
+								.getString("last_name"));
+						tempMember.setNickname(facebookUserInfo
+								.getString("username"));
+						tempMember.setProfilePic("https://graph.facebook.com/"
+								+ facebookUserInfo.getString("id")
+								+ "/picture?type=large");
+						tempMember
+								.setEmail(facebookUserInfo.getString("email"));
+						tempMember = new HooplaServiceImpl().registerMember(tempMember);
+					}
+
+					loginInfo.setLoggedIn(true);
+					loginInfo.setMember(tempMember);
+				}
+				loginInfo.setLogoutUrl("/logout/oauth");
+				log.info("Set loginInfo to " + loginInfo);
+				return loginInfo;
+			} catch (Exception e) {
+				log.log(Level.WARNING, e.getLocalizedMessage(), e);
+			}
 		} else {
-			loginInfo.setLoggedIn(false);
-			loginInfo.setLoginUrl(userService.createLoginURL(requestUri));
+
+			User user = userService.getCurrentUser();
+
+			if (userService.isUserLoggedIn() && user != null) {
+				loginInfo.setLoggedIn(true);
+				loginInfo.setMember(new HooplaServiceImpl()
+						.saveOrGetMember(user));
+				loginInfo.setLogoutUrl(userService.createLogoutURL(requestUri));
+			}
+			log.info("Logged in with google services " + loginInfo);
 		}
+
 		return loginInfo;
-	}
 
-	public Member getMember(String email) {
-		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
-		Member memb = null;
-		try {
-			memb = pm.getObjectById(Member.class,
-					KeyFactory.createKey(Member.class.getSimpleName(), email));
-			memb = pm.detachCopy(memb);
-		} catch (Exception e) {
-			log.log(Level.WARNING, e.getLocalizedMessage(), e);
-		}
-		return memb;
-	}
-
-	public Member storeMember(Member member) {
-		if(member == null) return null;
-		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
-		try {
-			log.info("storing member " + member + " with id " + member.getEmail());
-			return pm.detachCopy(pm.makePersistent(member));
-		} catch (Exception e) {
-			log.log(Level.WARNING, e.getLocalizedMessage(), e);
-			return null;
-		}
 	}
 
 }

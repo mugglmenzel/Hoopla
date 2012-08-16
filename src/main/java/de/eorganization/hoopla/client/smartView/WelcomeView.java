@@ -61,7 +61,7 @@ public class WelcomeView extends AbstractView {
 			@Override
 			public void onClick(ClickEvent event) {
 				Decision dec = new Decision();
-				dec.setMember(Hoopla.user.getMember());
+				dec.setMember(Hoopla.loginInfo.getMember());
 				Hoopla.hooplaService.storeDecision(dec,
 						new AsyncCallback<Decision>() {
 
@@ -110,7 +110,7 @@ public class WelcomeView extends AbstractView {
 							@Override
 							public void onSuccess(DecisionTemplate result) {
 								Decision dec = result.getDecision();
-								dec.setMember(Hoopla.user.getMember());
+								dec.setMember(Hoopla.loginInfo.getMember());
 								Hoopla.hooplaService.storeDecision(dec,
 										new AsyncCallback<Decision>() {
 
@@ -195,7 +195,7 @@ public class WelcomeView extends AbstractView {
 
 	private void updateDecisions() {
 
-		Hoopla.hooplaService.getDecisions(Hoopla.user.getMember().getEmail(),
+		Hoopla.hooplaService.getDecisions(Hoopla.loginInfo.getMember().getEmail(),
 				new AsyncCallback<List<Decision>>() {
 					public void onFailure(Throwable error) {
 					}

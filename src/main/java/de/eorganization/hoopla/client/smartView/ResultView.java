@@ -40,7 +40,7 @@ public class ResultView extends AbstractView {
 		super(true, true, false, "Go Back!", "Make New Decision!", "", -1, 0, 0);
 
 		HLayout bestLayout = new HLayout();
-		Img bestImg = new Img("/checkmark.png", 70, 70);
+		Img bestImg = new Img("/images/checkmark.png", 70, 70);
 
 		VLayout bestLabelLayout = new VLayout();
 		Label bestIntroLabel = new Label(

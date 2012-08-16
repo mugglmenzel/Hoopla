@@ -36,7 +36,7 @@ public class CriteriaEvaluationView extends AbstractView {
 		getInstructions().setContents("Set Importance of Criteria.");
 		getPostit()
 				.setContents(
-						"The Hoopla supports defining a specific importance for all goals and criteria to reflect the complexity of a Cloud decision precisely. To support the user with the definition of the decision's importance preferences the Hoopla uses pairwise comparisons.");
+						"The Hoopla supports defining a specific importance for all goals and criteria to reflect the complexity of a Cloud decision precisely. To support the loginInfo with the definition of the decision's importance preferences the Hoopla uses pairwise comparisons.");
 
 		goalsAndCriteria = new GoalsAndCriteriaCanvas(false);
 		goalsAndCriteria.changeLeftDistance(30);

@@ -54,7 +54,7 @@ public class AlternativesListGrid extends ListGrid {
 			editImg.setShowDown(false);
 			editImg.setShowRollOver(false);
 			editImg.setLayoutAlign(Alignment.CENTER);
-			editImg.setSrc("/comment_edit.png");
+			editImg.setSrc("/images/comment_edit.png");
 			editImg.setPrompt("Edit Alternative");
 			editImg.setHeight(16);
 			editImg.setWidth(16);
@@ -69,7 +69,7 @@ public class AlternativesListGrid extends ListGrid {
 			deleteImg.setShowDown(false);
 			deleteImg.setShowRollOver(false);
 			deleteImg.setLayoutAlign(Alignment.CENTER);
-			deleteImg.setSrc("/delete.png");
+			deleteImg.setSrc("/images/delete.png");
 			deleteImg.setPrompt("Delete Alternative");
 			deleteImg.setHeight(16);
 			deleteImg.setWidth(16);

@@ -1,6 +1,6 @@
 /*
  * Isomorphic SmartClient
- * Version SC_SNAPSHOT-2011-08-02 (2011-08-02)
+ * Version SC_SNAPSHOT-2011-12-05 (2011-12-05)
  * Copyright(c) 1998 and beyond Isomorphic Software, Inc. All rights reserved.
  * "SmartClient" is a trademark of Isomorphic Software, Inc.
  *
@@ -14,15 +14,14 @@ if(isc.Log && isc.Log.logDebug)isc.Log.logDebug(isc._pTM.message,'loadTime')
 else if(isc._preLog)isc._preLog[isc._preLog.length]=isc._pTM
 else isc._preLog=[isc._pTM]}isc.definingFramework=true;isc.DataSource.create({
 ID:"QuartzScheduler",
-dbName:"ANY_DATA",
 serverConstructor:"com.isomorphic.scheduler.QuartzScheduler",
-fields:{
-name:{
+fields:[
+{
 canEdit:false,
 name:"name",
 type:"text"
 },
-state:{
+{
 canEdit:false,
 name:"state",
 type:"intEnum",
@@ -32,7 +31,7 @@ valueMap:{
 "2":"Started"
 }
 }
-},
+],
 operationBinding:[
 {
 operationId:"start",
@@ -57,48 +56,122 @@ methodName:"doit"
 ]
 })
 isc.DataSource.create({
-ID:"QuartzJobGroups",
-dbName:"ANY_DATA",
-serverConstructor:"com.isomorphic.scheduler.QuartzJobGroups",
-fields:{
-name:{
-name:"name",
-primaryKey:true,
-type:"string"
-}
-}
-})
-isc.DataSource.create({
 ID:"QuartzJobs",
-dbName:"ANY_DATA",
 serverConstructor:"com.isomorphic.scheduler.QuartzJobs",
-fields:{
-group:{
+fields:[
+{
 name:"group",
 primaryKey:true,
 required:true,
 type:"string"
 },
-name:{
+{
 name:"name",
 primaryKey:true,
 required:true,
 type:"string"
 },
-description:{
+{
 name:"description",
 type:"string"
 },
-"class":{
-name:"class",
+{
+name:"className",
 required:true,
 type:"string"
 },
-dataMap:{
+{
+defaultValue:"false",
+name:"volatility",
+type:"boolean"
+},
+{
+defaultValue:"true",
+name:"durability",
+type:"boolean"
+},
+{
+defaultValue:"true",
+name:"recover",
+type:"boolean"
+},
+{
 name:"dataMap",
+showIf:"false",
+type:"Object"
+}
+]
+})
+isc.DataSource.create({
+ID:"QuartzTriggers",
+serverConstructor:"com.isomorphic.scheduler.QuartzTriggers",
+fields:[
+{
+name:"jobGroup",
+required:true,
+showIf:"false",
 type:"string"
 },
-state:{
+{
+name:"jobName",
+required:true,
+showIf:"false",
+type:"string"
+},
+{
+name:"group",
+primaryKey:true,
+required:true,
+type:"string"
+},
+{
+name:"name",
+primaryKey:true,
+required:true,
+type:"string"
+},
+{
+name:"description",
+type:"string"
+},
+{
+name:"dataMap",
+showIf:"false",
+type:"Object"
+},
+{
+name:"startTime",
+type:"date"
+},
+{
+name:"endTime",
+type:"date"
+},
+{
+name:"cronExpression",
+required:true,
+type:"text"
+},
+{
+name:"timeZone",
+type:"text"
+},
+{
+defaultValue:"false",
+name:"volatility",
+type:"boolean"
+},
+{
+defaultValue:"0",
+name:"misfireInstruction",
+type:"intEnum",
+valueMap:{
+"0":"MISFIRE_INSTRUCTION_SMART_POLICY",
+"1":"MISFIRE_INSTRUCTION_FIRE_ONCE_NOW",
+"2":"MISFIRE_INSTRUCTION_DO_NOTHING"
+}
+},
+{
 canEdit:false,
 name:"state",
 type:"intEnum",
@@ -110,60 +183,20 @@ valueMap:{
 "4":"Blocked",
 "-1":"None"
 }
-},
-startTime:{
-name:"startTime",
-type:"datetime"
-},
-endTime:{
-name:"endTime",
-type:"datetime"
-},
-cronExpression:{
-name:"cronExpression",
-type:"text"
-},
-timeZone:{
-name:"timeZone",
-type:"text"
 }
-}
+]
 })
-isc.DataSource.create({
-ID:"QuartzJobDataMap",
-dbName:"ANY_DATA",
-serverConstructor:"com.isomorphic.scheduler.QuartzJobDataMap",
-fields:{
-group:{
-name:"group",
-primaryKey:true,
-required:true,
-type:"string"
-},
-name:{
-name:"name",
-primaryKey:true,
-required:true,
-type:"string"
-},
-key:{
-name:"key",
-required:true,
-type:"string"
-},
-value:{
-name:"value",
-required:true,
-type:"string"
-}
-}
-})
-isc.defineClass("QuartzJobDetailPane","VLayout");isc.A=isc.QuartzJobDetailPane.getPrototype();isc.B=isc._allFuncs;isc.C=isc.B._maxIndex;isc.D=isc._funcClasses;isc.D[isc.C]=isc.A.Class;isc.A.headerDefaults={_constructor:"ToolStrip",width:"100%",height:33,titleDefaults:{_constructor:"Label",contents:"&nbsp;<b>Job Detail</b>"},members:["autoChild:title"]};isc.A.editFormProperties={_constructor:"DynamicForm",autoDraw:false,numCols:4,colWidths:[100,100,100,"*"],dataSource:"QuartzJobs",autoFocus:true,fields:[{name:"group",width:300,colSpan:3,tabIndex:10},{name:"name",width:300,colSpan:3,tabIndex:20},{name:"description",width:300,colSpan:3,tabIndex:30},{name:"class",width:300,tabIndex:40,colSpan:3},{name:"startTime",tabIndex:200},{name:"endTime",tabIndex:210},{name:"cronExpression",width:300,colSpan:3,tabIndex:220},{name:"timeZone",width:300,tabIndex:230,colSpan:3,endRow:true},{type:"rowSpacer"},{name:"btnApply",type:"button",title:"Apply",width:75,startRow:false,endRow:false,icon:"[SKIN]actions/save.png",click:"form.save()"},{name:"btnCancel",type:"button",title:"Cancel",width:75,startRow:false,endRow:false,icon:"[SKIN]actions/undo.png",click:"form.reset()"}],save:function(){this.saveData(function(_1,_2,_3){this.editRecord(_2);this.getField("group").setDisabled(true);this.getField("name").setDisabled(true)})}};isc.A.members=["autoChild:header","autoChild:editForm"];isc.B.push(isc.A.editNew=function isc_QuartzJobDetailPane_editNew(){this.editForm.editNewRecord();this.editForm.getField("group").setDisabled(false);this.editForm.getField("name").setDisabled(false)}
-,isc.A.edit=function isc_QuartzJobDetailPane_edit(_1){this.editForm.editRecord(_1);this.editForm.getField("group").setDisabled(true);this.editForm.getField("name").setDisabled(true)}
-);isc.B._maxIndex=isc.C+2;isc.defineClass("QuartzManager","VLayout");isc.A=isc.QuartzManager.getPrototype();isc.A.headerDefaults={_constructor:"ToolStrip",width:"100%",height:33,titleDefaults:{_constructor:"Label",contents:"&nbsp;<b>Jobs</b>"},refreshBtnDefaults:{_constructor:"ToolStripButton",showRollOver:false,icon:"[SKIN]actions/refresh.png",prompt:"Refresh jobs",click:"this.creator.creator.jobGrid.refresh()"},addBtnDefaults:{_constructor:"ToolStripButton",showRollOver:false,icon:"[SKIN]actions/add.png",prompt:"Add job",click:"this.creator.creator.jobEdit.editNew()"},removeBtnDefaults:{_constructor:"ToolStripButton",showRollOver:false,icon:"[SKIN]actions/remove.png",prompt:"Remove job",click:"this.creator.creator.jobGrid.removeSelectedData()"},members:["autoChild:title","starSpacer","autoChild:refreshBtn","autoChild:addBtn","autoChild:removeBtn"]};isc.A.jobGridDefaults={_constructor:"ListGrid",autoDraw:false,width:"100%",height:300,dataSource:"QuartzJobs",useAllDataSourceFields:true,autoFetchData:true,selectionType:"single",recordClick:"this.creator.jobEdit.edit(record)",refresh:function(){this.invalidateCache();this.fetchData()},add:function(){this.creator.jobEdit.editNew()},remove:function(){}};isc.A.jobDetailHeaderDefaults={_constructor:"ToolStrip",width:"100%",height:33,titleDefaults:{_constructor:"Label",contents:"&nbsp;<b>Job Detail</b>"},members:["autoChild:title"]};isc.A.jobEditDefaults={_constructor:"QuartzJobDetailPane",autoDraw:false};isc.A.members=["autoChild:header","autoChild:jobGrid","autoChild:jobEdit"];isc._moduleEnd=isc._SQLBrowser_end=(isc.timestamp?isc.timestamp():new Date().getTime());if(isc.Log&&isc.Log.logIsInfoEnabled('loadTime'))isc.Log.logInfo('SQLBrowser module init time: ' + (isc._moduleEnd-isc._moduleStart) + 'ms','loadTime');delete isc.definingFramework;}else{if(window.isc && isc.Log && isc.Log.logWarn)isc.Log.logWarn("Duplicate load of module 'SQLBrowser'.");}
+isc.defineClass("QuartzManager","SectionStack");isc.A=isc.QuartzManager.getPrototype();isc.B=isc._allFuncs;isc.C=isc.B._maxIndex;isc.D=isc._funcClasses;isc.D[isc.C]=isc.A.Class;isc.A.visibilityMode="multiple";isc.A.jobsPauseBtnDefaults={_constructor:"IButton",title:"Pause Job",prompt:"Suspends all triggers associated with selected job",click:function(){var _1=this.creator.jobsGrid;if(!_1.anySelected()){isc.say("Please select a job first");return}
+var _2=_1.getSelectedRecord();var _3=this;QuartzJobs.performCustomOperation("pauseJob",{group:_2.group,name:_2.name},function(_4){_3.creator.triggersGrid.invalidateCache();isc.say('Job Paused')})}};isc.A.jobsResumeBtnDefaults={_constructor:"IButton",title:"Resume Job",prompt:"Resumes all triggers associated with selected job",click:function(){var _1=this.creator.jobsGrid;if(!_1.anySelected()){isc.say("Please select a job first");return}
+var _2=_1.getSelectedRecord();var _3=this;QuartzJobs.performCustomOperation("resumeJob",{group:_2.group,name:_2.name},function(_4){_3.creator.triggersGrid.invalidateCache();isc.say('Job Resumed')})}};isc.A.jobsTriggerBtnDefaults={_constructor:"IButton",title:"Trigger Job",prompt:"Triggers selected job immediately",click:function(){var _1=this.creator.jobsGrid;if(!_1.anySelected()){isc.say("Please select a job first");return}
+var _2=_1.getSelectedRecord();QuartzJobs.performCustomOperation("triggerJob",{group:_2.group,name:_2.name},function(_3){isc.say('Job Triggered')})}};isc.A.jobsRefreshBtnDefaults={_constructor:"ImgButton",showRollOver:false,size:16,src:"[SKIN]actions/refresh.png",prompt:"Refresh jobs",click:function(){this.creator.jobsGrid.invalidateCache();this.creator.triggersGrid.setData([])}};isc.A.jobsAddBtnDefaults={_constructor:"ImgButton",size:16,showRollOver:false,src:"[SKIN]actions/add.png",prompt:"Add job",click:"this.creator.jobsGrid.startEditingNew()"};isc.A.jobsRemoveBtnDefaults={_constructor:"ImgButton",size:16,showRollOver:false,src:"[SKIN]actions/remove.png",prompt:"Remove job",click:function(){var _1=this;isc.ask("Are you sure you wish to delete the selected job?  This will remove all"+" triggers associated with this job.",function(_2){if(_2)_1.creator.jobsGrid.removeSelectedData(function(_3){_1.creator.triggersGrid.setData([])})})}};isc.A.jobsGridDefaults={_constructor:"ListGrid",autoDraw:false,height:"30%",dataSource:"QuartzJobs",useAllDataSourceFields:true,autoFetchData:true,selectionType:"single",recordDoubleClick:function(){isc.say("The Quartz APIs do not allow modification of job metadata without destroying"+" all triggers attached to the job, so you must remove and re-create the job if"+" that's your intention");return},selectionChanged:function(_1,_2){if(_2){this.creator.triggersGrid.filterData({jobGroup:_1.group,jobName:_1.name})}else{this.creator.triggersGrid.setData([])}},remove:function(){}};isc.A.triggersPauseBtnDefaults={_constructor:"IButton",title:"Pause Trigger",prompt:"Suspends selected trigger",click:function(){var _1=this.creator.triggersGrid;if(!_1.anySelected()){isc.say("Please select a trigger first");return}
+var _2=_1.getSelectedRecord();QuartzTriggers.performCustomOperation("pauseTrigger",{group:_2.group,name:_2.name},function(_3){_1.invalidateCache();isc.say('Trigger Paused')})}};isc.A.triggersResumeBtnDefaults={_constructor:"IButton",title:"Resume Trigger",prompt:"Resumes selected trigger",click:function(){var _1=this.creator.triggersGrid;if(!_1.anySelected()){isc.say("Please select a trigger first");return}
+var _2=_1.getSelectedRecord();QuartzTriggers.performCustomOperation("resumeTrigger",{group:_2.group,name:_2.name},function(_3){_1.invalidateCache();isc.say('Trigger Resumed')})}};isc.A.triggersRefreshBtnDefaults={_constructor:"ImgButton",showRollOver:false,size:16,src:"[SKIN]actions/refresh.png",prompt:"Refresh jobs",click:"this.creator.triggersGrid.invalidateCache()"};isc.A.triggersAddBtnDefaults={_constructor:"ImgButton",size:16,showRollOver:false,src:"[SKIN]actions/add.png",prompt:"Add trigger",click:function(){var _1=this.creator.jobsGrid;if(!_1.anySelected()){isc.say("Please select a job first");return}
+var _2=_1.getSelectedRecord();this.creator.triggersGrid.startEditingNew({jobGroup:_2.group,jobName:_2.name})}};isc.A.triggersRemoveBtnDefaults={_constructor:"ImgButton",size:16,showRollOver:false,src:"[SKIN]actions/remove.png",prompt:"Remove job",click:function(){var _1=this;isc.ask("Are you sure you wish to remove the selected trigger?",function(_2){if(_2)_1.creator.jobsGrid.removeSelectedData(function(_3){_1.creator.triggersGrid.invalidateCache()})})}};isc.A.triggersGridDefaults={_constructor:"ListGrid",canEdit:true,autoDraw:false,dataSource:"QuartzTriggers",useAllDataSourceFields:true,selectionType:"single",remove:function(){}};isc.B.push(isc.A.initWidget=function isc_QuartzManager_initWidget(){this.Super("initWidget",arguments);this.jobsPauseBtn=this.createAutoChild("jobsPauseBtn");this.jobsResumeBtn=this.createAutoChild("jobsResumeBtn");this.jobsTriggerBtn=this.createAutoChild("jobsTriggerBtn");this.jobsRefreshBtn=this.createAutoChild("jobsRefreshBtn");this.jobsAddBtn=this.createAutoChild("jobsAddBtn");this.jobsRemoveBtn=this.createAutoChild("jobsRemoveBtn");this.jobsGrid=this.createAutoChild("jobsGrid");this.addSection({title:"Jobs",expanded:true,items:[this.jobsGrid],controls:[this.jobsPauseBtn,this.jobsResumeBtn,this.jobsTriggerBtn,this.jobsRefreshBtn,this.jobsAddBtn,this.jobsRemoveBtn]});;this.triggersPauseBtn=this.createAutoChild("triggersPauseBtn");this.triggersResumeBtn=this.createAutoChild("triggersResumeBtn");this.triggersRefreshBtn=this.createAutoChild("triggersRefreshBtn");this.triggersAddBtn=this.createAutoChild("triggersAddBtn");this.triggersRemoveBtn=this.createAutoChild("triggersRemoveBtn");this.triggersGrid=this.createAutoChild("triggersGrid");this.addSection({title:"Triggers",expanded:true,items:[this.triggersGrid],controls:[this.triggersPauseBtn,this.triggersResumeBtn,this.triggersRefreshBtn,this.triggersAddBtn,this.triggersRemoveBtn]});}
+);isc.B._maxIndex=isc.C+1;isc._moduleEnd=isc._SQLBrowser_end=(isc.timestamp?isc.timestamp():new Date().getTime());if(isc.Log&&isc.Log.logIsInfoEnabled('loadTime'))isc.Log.logInfo('SQLBrowser module init time: ' + (isc._moduleEnd-isc._moduleStart) + 'ms','loadTime');delete isc.definingFramework;}else{if(window.isc && isc.Log && isc.Log.logWarn)isc.Log.logWarn("Duplicate load of module 'SQLBrowser'.");}
 /*
  * Isomorphic SmartClient
- * Version SC_SNAPSHOT-2011-08-02 (2011-08-02)
+ * Version SC_SNAPSHOT-2011-12-05 (2011-12-05)
  * Copyright(c) 1998 and beyond Isomorphic Software, Inc. All rights reserved.
  * "SmartClient" is a trademark of Isomorphic Software, Inc.
  *

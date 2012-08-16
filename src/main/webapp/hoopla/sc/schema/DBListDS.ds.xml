@@ -1,21 +1,21 @@
 isc.DataSource.create({
     ID:"DBListDS",
     dropExtraFields:false,
-    fields:{
-        name:{
+    fields:[
+        {
             name:"name",
             primaryKey:true
         },
-        type:{
+        {
             name:"type"
         },
-        version:{
+        {
             name:"version"
         },
-        status:{
+        {
             name:"status"
         }
-    },
+    ],
     operationBindings:[
         {
             language:"groovy",

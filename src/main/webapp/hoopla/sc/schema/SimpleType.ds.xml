@@ -3,14 +3,14 @@ isc.DataSource.create({
     ID:"SimpleType",
     addGlobalId:false,
     inheritsFrom:"DataSourceField",
-    fields:{
-        inheritsFrom:{
+    fields:[
+        {
             name:"inheritsFrom",
             type:"string"
         },
-        editorType:{
+        {
             name:"editorType",
             type:"string"
         }
-    }
+    ]
 })

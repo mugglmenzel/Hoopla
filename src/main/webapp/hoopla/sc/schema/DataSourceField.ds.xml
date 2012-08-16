@@ -103,6 +103,11 @@ isc.DataSource.create({
             type:"boolean",
             xmlAttribute:"true"
         },
+        canView:{
+            title:"Can View",
+            type:"boolean",
+            xmlAttribute:"true"
+        },
         inapplicable:{
             inapplicable:"true",
             title:"Inapplicable",
@@ -204,6 +209,14 @@ isc.DataSource.create({
             xmlAttribute:"true"
         },
         canExport:{
+            type:"boolean",
+            xmlAttribute:"true"
+        },
+        sqlStorageStrategy:{
+            type:"string",
+            xmlAttribute:"true"
+        },
+        encodeInResponse:{
             type:"boolean",
             xmlAttribute:"true"
         }

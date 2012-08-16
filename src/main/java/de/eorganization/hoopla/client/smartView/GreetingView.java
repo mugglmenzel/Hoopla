@@ -112,7 +112,7 @@ public class GreetingView extends AbstractView {
 
 	private void updateDecisions() {
 
-		Hoopla.hooplaService.getDecisions(Hoopla.user.getMember().getEmail(),
+		Hoopla.hooplaService.getDecisions(Hoopla.loginInfo.getMember().getEmail(),
 				new AsyncCallback<List<Decision>>() {
 					public void onFailure(Throwable error) {
 					}

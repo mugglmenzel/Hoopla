@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import de.eorganization.hoopla.shared.model.Member;
 import de.eorganization.hoopla.shared.model.ahp.configuration.Decision;
 import de.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate;
 import de.eorganization.hoopla.shared.model.ahp.values.Evaluation;
@@ -32,6 +33,10 @@ public interface HooplaService extends RemoteService {
 	public DecisionTemplate getDecisionTemplate(DecisionTemplate dec);
 	
 	public DecisionTemplate getDecisionTemplate(Long id);
+	
+	public Member registerMember(Member member);
+	
+	public Member updateMember(Member member);
 	
 	public EvaluationResult evaluate(Decision decision, List<Evaluation> eval, int precision) throws Exception;
 

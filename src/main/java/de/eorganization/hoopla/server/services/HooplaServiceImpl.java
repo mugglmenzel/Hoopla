@@ -12,11 +12,14 @@ import javax.jdo.PersistenceManager;
 import org.datanucleus.jdo.NucleusJDOHelper;
 
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.users.User;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.eorganization.hoopla.client.services.HooplaService;
 import de.eorganization.hoopla.server.jdo.PersistenceManagerFactoryHelper;
 import de.eorganization.hoopla.server.logic.ahp.AnalyticHierarchyProcess;
+import de.eorganization.hoopla.shared.model.Member;
+import de.eorganization.hoopla.shared.model.UserRole;
 import de.eorganization.hoopla.shared.model.ahp.configuration.Criterion;
 import de.eorganization.hoopla.shared.model.ahp.configuration.Decision;
 import de.eorganization.hoopla.shared.model.ahp.configuration.DecisionTemplate;
@@ -87,7 +90,6 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
 		try {
 
-			
 			result = pm.makePersistent(newDecision);
 
 			result = detachDecision(result, pm);
@@ -323,6 +325,70 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 		return detached;
 	}
 
+	public Member getMember(String email) {
+		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
+		Member mbr, detached = null;
+		try {
+
+			mbr = pm.getObjectById(Member.class,
+					KeyFactory.createKey(Member.class.getSimpleName(), email));
+			detached = pm.detachCopy(mbr);
+
+		} catch (Exception e) {
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
+		} finally {
+			pm.close();
+		}
+
+		return detached;
+
+	}
+
+	public Member saveOrGetMember(User user) {
+		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
+		Member mbr, detached = null;
+		try {
+
+			mbr = pm.getObjectById(
+					Member.class,
+					KeyFactory.createKey(Member.class.getSimpleName(),
+							user.getEmail()));
+			if (mbr == null)
+				detached = registerMember(new Member(user.getEmail(),
+						user.getNickname(), UserRole.USER));
+			else
+				detached = pm.detachCopy(mbr);
+
+		} catch (Exception e) {
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
+		} finally {
+			pm.close();
+		}
+
+		return detached;
+	}
+
+	public Member registerMember(Member member) {
+		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
+		Member mbr, detached = null;
+		try {
+
+			mbr = pm.makePersistent(member);
+			detached = pm.detachCopy(mbr);
+
+		} catch (Exception e) {
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
+		} finally {
+			pm.close();
+		}
+
+		return detached;
+	}
+
+	public Member updateMember(Member member) {
+		return registerMember(member);
+	}
+
 	public EvaluationResult evaluate(Decision decision, List<Evaluation> eval,
 			int precision) throws Exception {
 		try {
@@ -333,6 +399,26 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 			log.log(Level.WARNING, e.getLocalizedMessage(), e);
 			throw e;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Member findMemberBySocialId(String socialId) {
+		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
+		Member mbr, detached = null;
+		try {
+
+			mbr = new ArrayList<Member>(((Collection<Member>) pm.newQuery(
+					Member.class, "socialId = " + socialId).execute())).get(0);
+
+			detached = pm.detachCopy(mbr);
+
+		} catch (Exception e) {
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
+		} finally {
+			pm.close();
+		}
+
+		return detached;
 	}
 
 }

@@ -4,7 +4,6 @@ isc.DataSource.create({
     addGlobalId:"false",
     fields:{
         ID:{
-            required:"true",
             type:"string",
             xmlAttribute:"true"
         },
@@ -57,8 +56,7 @@ isc.DataSource.create({
             childTagName:"field",
             multiple:"true",
             propertiesOnly:"true",
-            type:"DataSourceField",
-            uniqueProperty:"name"
+            type:"DataSourceField"
         },
         addGlobalId:{
             title:"Add Global ID",
