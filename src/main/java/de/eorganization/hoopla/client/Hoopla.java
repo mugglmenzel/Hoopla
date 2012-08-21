@@ -295,8 +295,8 @@ public class Hoopla implements EntryPoint {
 			tabs.addTab(results);
 			views.add(resultsView);
 		}
-		if (loginInfo.getMember() != null
-				&& UserRole.ADMIN.equals(loginInfo.getMember().getRole())) {
+		if (getMember() != null
+				&& UserRole.ADMIN.equals(getMember().getRole())) {
 			Tab admin = new Tab("admin");
 			final AdminView adminView = new AdminView();
 			admin.setPane(adminView.getLayout());

@@ -408,7 +408,7 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 		try {
 
 			mbr = new ArrayList<Member>(((Collection<Member>) pm.newQuery(
-					Member.class, "socialId = " + socialId).execute())).get(0);
+					Member.class, "socialId == " + socialId).execute())).get(0);
 
 			detached = pm.detachCopy(mbr);
 
