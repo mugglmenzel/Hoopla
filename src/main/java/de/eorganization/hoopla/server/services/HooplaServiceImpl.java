@@ -86,7 +86,6 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 
 	public Decision storeDecision(Decision newDecision) {
 		Decision result = null;
-		log.info("storing " + newDecision);
 		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
 		try {
 
@@ -99,9 +98,24 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 		} finally {
 			pm.close();
 		}
-		log.info("returning " + newDecision);
 
 		return result;
+	}
+	
+	public boolean deleteDecision(Decision decision) {
+		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
+		try {
+
+			pm.deletePersistent(decision);
+
+		} catch (Exception e) {
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
+			return false;
+		} finally {
+			pm.close();
+		}
+
+		return true;
 	}
 
 	public DecisionTemplate storeDecisionTemplate(DecisionTemplate newTemplate) {
@@ -120,6 +134,24 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 		}
 
 		return result;
+	}
+	
+	public boolean deleteDecisionTemplate(DecisionTemplate decision) {
+		log.info("deleting " + decision);
+		PersistenceManager pm = PersistenceManagerFactoryHelper.getPM();
+		try {
+
+			pm.deletePersistent(decision);
+
+		} catch (Exception e) {
+			log.log(Level.WARNING, e.getLocalizedMessage(), e);
+			return false;
+		} finally {
+			pm.close();
+		}
+		log.info("deleted " + decision);
+
+		return true;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -408,7 +440,7 @@ public class HooplaServiceImpl extends RemoteServiceServlet implements
 		try {
 
 			mbr = new ArrayList<Member>(((Collection<Member>) pm.newQuery(
-					Member.class, "socialId == " + socialId).execute())).get(0);
+					Member.class, "socialId == '" + socialId + "'").execute())).get(0);
 
 			detached = pm.detachCopy(mbr);
 

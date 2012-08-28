@@ -106,6 +106,7 @@ public class TemplateImportServlet extends HttpServlet {
 						decisionTemplate = new HooplaServiceImpl()
 								.getDecisionTemplate(new Long(itemContent)
 										.longValue());
+						new HooplaServiceImpl().deleteDecisionTemplate(decisionTemplate);
 					} catch (Exception e) {
 						log.log(Level.WARNING, e.getLocalizedMessage(), e);
 					}
@@ -208,6 +209,8 @@ public class TemplateImportServlet extends HttpServlet {
 	}
 
 	private void parseAlternatives(NodeList altNodes, Decision newDecision) {
+		newDecision.getAlternatives().clear();
+		
 		for (int i = 0; i < altNodes.getLength(); i++) {
 			Node node = altNodes.item(i);
 
@@ -233,6 +236,8 @@ public class TemplateImportServlet extends HttpServlet {
 	}
 
 	private void parseGoals(NodeList goalNodes, Decision newDecision) {
+		newDecision.getGoals().clear();
+		
 		for (int i = 0; i < goalNodes.getLength(); i++) {
 			Node node = goalNodes.item(i);
 

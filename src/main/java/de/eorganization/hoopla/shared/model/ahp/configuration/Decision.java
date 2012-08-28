@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.jdo.annotations.Element;
 import javax.jdo.annotations.Embedded;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
