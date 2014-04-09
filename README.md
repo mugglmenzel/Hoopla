@@ -1,4 +1,4 @@
-TheMaze
-=======
+The Hoopla
+==========
 
-The Maze Themepark Ride - Where to go? Choose a Cloud Infrastructure or not?
+The Hoopla Themepark Ride - Where to go? Choose a Cloud Infrastructure or not? Which Compute Service to choose?
